@@ -1,0 +1,30 @@
+---
+import "../styles/styles.css";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AURA Protocol</title>
+</head>
+<body class="font-sans text-gray-800 bg-white">
+<header class="bg-gray-100 border-b border-gray-300 px-6 py-4">
+    <nav class="flex space-x-6 text-sm font-medium text-gray-700">
+        <a href="/" class="hover:text-blue-600">Home</a>
+        <a href="/vision" class="hover:text-blue-600">Vision</a>
+        <a href="/block" class="hover:text-blue-600">Block</a>
+        <a href="/collaborators" class="hover:text-blue-600">Collaborators</a>
+    </nav>
+</header>
+
+<main class="min-h-screen px-4 py-6">
+    <slot />
+</main>
+
+<footer class="border-t border-gray-200 text-xs text-center text-gray-500 py-4">
+    © 2025 AURA Protocol. All rights reserved.
+</footer>
+</body>
+</html>
