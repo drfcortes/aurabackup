@@ -27,8 +27,25 @@ import "../styles/styles.css";
     <meta name="twitter:image" content="/og-preview.jpg" />
 </head>
 <body class="font-sans text-gray-800 bg-white">
-<header class="bg-gray-100 border-b border-gray-300 px-6 py-4">
-    <nav class="flex space-x-6 text-sm font-medium text-gray-700">
+<header class="bg-gray-100 border-b border-gray-300 px-6 py-4 flex items-center justify-between">
+    <!-- Identidad / Logo -->
+    <a href="/" class="flex items-center gap-3 group" aria-label="AURA Home">
+        <!-- Usa tu PNG (recomendado). Si no tienes, cambia a /favicon.ico -->
+        <img
+                src="/logo1.png"
+                srcset="/logo1.png 1x, /logo1@2x.png 2x"
+                alt="AURA Logo"
+                class="h-8 w-8 rounded-lg"
+                loading="eager"
+                decoding="async"
+        />
+        <span class="text-xl font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
+      AURA
+    </span>
+    </a>
+
+    <!-- Navegación -->
+    <nav class="flex items-center gap-6 text-sm font-medium text-gray-700">
         <a href="/" class="hover:text-blue-600">Home</a>
         <a href="/vision" class="hover:text-blue-600">Vision</a>
         <a href="/block" class="hover:text-blue-600">Block</a>
