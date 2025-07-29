@@ -17,31 +17,67 @@ const jsonData = {
 ---
 
 <Layout>
-    <main class="p-8 max-w-4xl mx-auto">
-        <h1 class="text-3xl font-bold text-blue-800 mb-4">AURA JSON Block</h1>
-        <p class="text-gray-700 mb-6">
-            This is the minimal verifiable structure used to declare AI involvement in content creation.
+    <main class="p-8 max-w-4xl mx-auto text-gray-800">
+        <h1 class="text-3xl font-bold text-auraWine mb-6">AURA JSON Block</h1>
+
+        <p class="mb-4">
+            The AURA JSON block is the core structure that allows any document or artifact to transparently declare the use of generative AI. This metadata ensures traceability, reproducibility, and ethical accountability.
         </p>
 
-        <!-- Botones funcionales con visualización condicional -->
+        <div class="bg-gray-50 border border-gray-300 rounded-md shadow-sm p-4 mb-6 text-sm font-mono overflow-auto">
+            <pre class="whitespace-pre-wrap break-words"><code>{JSON.stringify(jsonData, null, 2)}</code></pre>
+        </div>
+
+        <!-- Botones funcionales -->
         <JsonActions jsonData={jsonData} client:load />
 
-        <!-- Explicación -->
-        <ul class="mt-6 text-sm text-gray-600 list-disc list-inside">
-            <li><code>aura_version</code>: Protocol version</li>
-            <li><code>model</code>: Name of the AI model used</li>
-            <li><code>provider</code>: Platform or service that provided the AI</li>
-            <li><code>prompt</code>: Human input that triggered generation</li>
-            <li><code>timestamp</code>: UTC time of generation</li>
-            <li><code>user_edit</code>: Indicates if post-editing was done</li>
-            <li><code>content_hash</code>: Hash of final content for integrity</li>
-            <li><code>license</code>: Usage license</li>
-            <li><code>notes</code>: Additional human notes</li>
-            <li><code>uid</code>: Unique content identifier</li>
-        </ul>
+        <h2 class="text-2xl font-semibold text-emerald-400 mt-10 mb-4">Field Definitions</h2>
 
-        <p class="mt-6 text-gray-700">
-            The <code>content_hash</code> ensures integrity; the <code>prompt</code> and <code>model</code> identify the generative event.
+        <dl class="text-sm text-gray-700 space-y-3">
+            <div>
+                <dt class="font-medium text-auraWine"><code>aura_version</code></dt>
+                <dd>Version of the AURA protocol used for metadata generation.</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>model</code></dt>
+                <dd>Name of the AI model (e.g., GPT-4o, Stable Diffusion).</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>provider</code></dt>
+                <dd>The platform or service through which the AI was accessed (e.g., OpenAI, HuggingFace).</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>prompt</code></dt>
+                <dd>The human-written input that triggered the AI generation.</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>timestamp</code></dt>
+                <dd>Time of generation in UTC (ISO 8601 format).</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>user_edit</code></dt>
+                <dd>Boolean flag indicating whether the AI output was edited by a human after generation.</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>content_hash</code></dt>
+                <dd>Hash value representing the final content. Used to verify integrity and non-tampering.</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>license</code></dt>
+                <dd>Usage license of the content (e.g., CC-BY-4.0).</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>notes</code></dt>
+                <dd>Optional notes by the human contributor (e.g., type of edit, intent).</dd>
+            </div>
+            <div>
+                <dt class="font-medium text-auraWine"><code>uid</code></dt>
+                <dd>Unique identifier for the contribution. Can be linked to a public database.</dd>
+            </div>
+        </dl>
+
+        <p class="mt-8 text-sm text-gray-600 italic">
+            These fields can be extended to include additional provenance information depending on context or institution-specific requirements.
         </p>
     </main>
 </Layout>
