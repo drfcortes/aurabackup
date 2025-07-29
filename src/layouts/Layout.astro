@@ -1,8 +1,7 @@
 ---
-import "../styles/styles.css";
+import "../styles/styles.css"; // Asegúrate de que esta ruta sea correcta
 ---
 
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -13,39 +12,28 @@ import "../styles/styles.css";
     <link rel="icon" href="/favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 
-    <!-- ✅ Open Graph Meta Tags -->
+    <!-- ✅ Open Graph -->
     <meta property="og:title" content="AURA Protocol" />
     <meta property="og:description" content="Transparent attribution for AI-generated content." />
     <meta property="og:image" content="/og-preview.jpg" />
     <meta property="og:url" content="https://aurablock.org" />
     <meta property="og:type" content="website" />
 
-    <!-- ✅ Twitter Card (opcional pero recomendable) -->
+    <!-- ✅ Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="AURA Protocol" />
     <meta name="twitter:description" content="Transparent attribution for AI-generated content." />
     <meta name="twitter:image" content="/og-preview.jpg" />
 </head>
-<body class="font-sans text-gray-800 bg-white">
-<header class="bg-gray-100 border-b border-gray-300 px-6 py-4 flex items-center justify-between">
-    <!-- Identidad / Logo -->
-    <a href="/" class="flex items-center gap-3 group" aria-label="AURA Home">
-        <!-- Usa tu PNG (recomendado). Si no tienes, cambia a /favicon.ico -->
-        <img
-                src="/logo1.png"
-                srcset="/logo1.png 1x, /logo1@2x.png 2x"
-                alt="AURA Logo"
-                class="h-8 w-8 rounded-lg"
-                loading="eager"
-                decoding="async"
-        />
-        <span class="text-xl font-semibold text-gray-800 group-hover:text-blue-700 transition-colors">
-      AURA
-    </span>
-    </a>
 
-    <!-- Navegación -->
-    <nav class="flex items-center gap-6 text-sm font-medium text-gray-700">
+<body class="font-sans text-gray-800 bg-white">
+<!-- ✅ Header con logo -->
+<header class="bg-gray-100 border-b border-gray-300 px-6 py-4 flex items-center justify-between">
+    <a href="/" class="flex items-center space-x-3">
+        <img src="/logo1.png" alt="AURA Logo" class="h-8 w-auto" />
+        <span class="text-xl font-bold text-gray-800">AURA</span>
+    </a>
+    <nav class="flex space-x-6 text-sm font-medium text-gray-700">
         <a href="/" class="hover:text-blue-600">Home</a>
         <a href="/vision" class="hover:text-blue-600">Vision</a>
         <a href="/block" class="hover:text-blue-600">Block</a>
@@ -53,12 +41,6 @@ import "../styles/styles.css";
     </nav>
 </header>
 
-<main class="min-h-screen px-4 py-6">
-    <slot />
-</main>
-
-<footer class="border-t border-gray-200 text-xs text-center text-gray-500 py-4">
-    © 2025 AURA Protocol. All rights reserved.
-</footer>
+<slot /> <!-- Aquí se renderizan las páginas -->
 </body>
 </html>
