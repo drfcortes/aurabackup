@@ -1,5 +1,5 @@
 ---
-import "../styles/styles.css"; // Asegúrate de que esta ruta sea correcta
+import "../styles/styles.css"; // Asegúrate de que el archivo exista en src/styles/
 ---
 
 <html lang="en">
@@ -26,21 +26,24 @@ import "../styles/styles.css"; // Asegúrate de que esta ruta sea correcta
     <meta name="twitter:image" content="/og-preview.jpg" />
 </head>
 
-<body class="font-sans text-base text-auraWine bg-white">
-<!-- ✅ Header con logo -->
-<header class="bg-gray-100 border-b border-gray-300 px-6 py-4 flex items-center justify-between">
-    <a href="/" class="flex items-center space-x-3">
-        <img src="/logo1.png" alt="AURA Logo" class="h-8 w-auto" />
-        <span class="text-xl font-bold text-gray-800">AURA</span>
+<body class="font-sans text-base text-[#2b361c] bg-[#fefae3]">
+<!-- ✅ Header modernizado -->
+<header class="flex items-center justify-between px-6 py-4 border-b border-[#d4a369] bg-[#fefae3]">
+    <a href="/" class="flex items-center space-x-4">
+        <img src="/logo1.png" alt="AURA Logo" class="h-16 w-auto" />
+        <span class="text-2xl font-bold tracking-wide text-[#636b3f]">AURA</span>
     </a>
-    <nav class="flex space-x-6 text-sm font-medium text-gray-700">
-        <a href="/" class="hover:text-auraWine">Home</a>
-        <a href="/vision" class="hover:text-auraWine">Vision</a>
-        <a href="/block" class="hover:text-auraWine">Block</a>
-        <a href="/collaborators" class="hover:text-auraWine">Collaborators</a>
+    <nav class="hidden md:flex space-x-6 text-sm font-medium text-[#2b361c]">
+        <a href="/" class="hover:text-[#b17036]">Home</a>
+        <a href="/vision" class="hover:text-[#b17036]">Vision</a>
+        <a href="/block" class="hover:text-[#b17036]">Block</a>
+        <a href="/collaborators" class="hover:text-[#b17036]">Collaborators</a>
     </nav>
 </header>
 
-<slot /> <!-- Aquí se renderizan las páginas -->
+<!-- ✅ Contenido principal -->
+<main class="min-h-screen px-4 sm:px-6 lg:px-8">
+    <slot />
+</main>
 </body>
 </html>

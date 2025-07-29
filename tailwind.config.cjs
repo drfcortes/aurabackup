@@ -9,11 +9,11 @@ module.exports = {
         extend: {
             colors: {
                 aura: {
-                    green: '#636b3f',        // Marine Green
-                    deep: '#2b361c',         // Deep Green
-                    yellow: '#fefae3',       // Barium Yellow
-                    sepia: '#d4a369',        // Sepia
-                    leather: '#b17036',      // Leather
+                    green: '#636b3f',       // Marine Green
+                    deep: '#2b361c',        // Deep Green
+                    yellow: '#fefae3',      // Barium Yellow
+                    sepia: '#d4a369',       // Sepia
+                    leather: '#b17036',     // Leather
                 }
             }
         }
