@@ -1,15 +1,22 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-    content: ["./src/**/*.{astro,html,js,jsx,ts,tsx}"],
+    content: [
+        './src/**/*.{astro,js,jsx,ts,tsx,vue,svelte}',
+        './components/**/*.{astro,js,jsx,ts,tsx}',
+        './layouts/**/*.{astro,js,jsx,ts,tsx}'
+    ],
     theme: {
         extend: {
-            fontSize: {
-                base: '18px', // ← sube de 16px (por defecto) a 18px
-            },
             colors: {
-                auraWine: '#4B2E39',
+                aura: {
+                    green: '#636b3f',        // Marine Green
+                    deep: '#2b361c',         // Deep Green
+                    yellow: '#fefae3',       // Barium Yellow
+                    sepia: '#d4a369',        // Sepia
+                    leather: '#b17036',      // Leather
+                }
             }
-        },
-        plugins: [],
-    }
-};
+        }
+    },
+    plugins: []
+}
