@@ -8,7 +8,7 @@ export default function NavbarResponsive() {
             <div className="flex justify-between items-center max-w-7xl mx-auto">
                 <a href="/" className="flex items-center space-x-3">
                     <img src="/logo1.png" alt="AURA Logo" className="h-12 md:h-16" />
-                    <span className="text-2xl font-bold tracking-wide text-aura-soft">
+                    <span className="text-2xl font-bold tracking-wide text-aura-deep">
             AURA
           </span>
                 </a>
