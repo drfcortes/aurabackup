@@ -4,7 +4,7 @@ export default function NavbarResponsive() {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <header className="w-full border-b border-aura-soft bg-aura-gray px-4 sm:px-6 py-4">
+        <header className="w-full border-b border-aura-soft bg-aura-cream px-4 sm:px-6 py-4">
             <div className="flex justify-between items-center max-w-7xl mx-auto">
                 <a href="/" className="flex items-center space-x-3">
                     <img src="/logo1.png" alt="AURA Logo" className="h-12 md:h-16" />
