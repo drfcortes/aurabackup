@@ -30,7 +30,7 @@ p {
 /* Enlaces con subrayado tenue y buen contraste */
 a {
     text-decoration: underline dotted;
-    text-underline-offset: 0.5 px;
+    text-underline-offset: 1px;
     color: inherit;
 }
 
