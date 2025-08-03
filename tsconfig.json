@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
     "module": "ESNext",
     "target": "ESNext",
@@ -11,7 +11,13 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "types": ["astro/client"]
+    "types": [
+      "astro/client"
+    ],
+    "jsxImportSource": "react"
   },
-  "include": ["src", "env.d.ts"]
+  "include": [
+    "src",
+    "env.d.ts"
+  ]
 }

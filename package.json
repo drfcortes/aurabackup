@@ -8,8 +8,15 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "@astrojs/node": "^9.3.1",
     "@astrojs/react": "^4.3.0",
-    "astro": "^4.6.2"
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "astro": "^5.12.6",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hot-toast": "^2.5.2",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@astrojs/sitemap": "^3.4.2",

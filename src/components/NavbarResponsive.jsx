@@ -9,8 +9,8 @@ export default function NavbarResponsive() {
                 <a href="/" className="flex items-center space-x-3">
                     <img src="/logo1.png" alt="AURA Logo" className="h-12 md:h-16" />
                     <span className="text-2xl font-bold tracking-wide text-aura-deep">
-            AURA
-          </span>
+                        AURA
+                    </span>
                 </a>
 
                 {/* Botón hamburguesa solo en móvil */}
@@ -22,11 +22,12 @@ export default function NavbarResponsive() {
                     ☰
                 </button>
 
-                {/* Menú horizontal visible solo en escritorio */}
+                {/* Menú horizontal visible en escritorio */}
                 <nav className="hidden md:flex space-x-6 text-sm font-medium text-aura-deep">
                     <a href="/" className="hover:text-aura-leather">Home</a>
+                    <a href="/generate" className="hover:text-aura-leather">Generate</a>
+                    <a href="/search" className="hover:text-aura-leather">Lookup</a>
                     <a href="/vision" className="hover:text-aura-leather">Vision</a>
-                    <a href="/block" className="hover:text-aura-leather">Block</a>
                     <a href="/collaborators" className="hover:text-aura-leather">Collaborators</a>
                 </nav>
             </div>
@@ -35,8 +36,9 @@ export default function NavbarResponsive() {
             {isOpen && (
                 <nav className="md:hidden mt-4 space-y-2 text-sm font-medium text-aura-deep">
                     <a href="/" className="block hover:text-aura-leather">Home</a>
+                    <a href="/generate" className="block hover:text-aura-leather">Generate</a>
+                    <a href="/search" className="block hover:text-aura-leather">Lookup</a>
                     <a href="/vision" className="block hover:text-aura-leather">Vision</a>
-                    <a href="/block" className="block hover:text-aura-leather">Block</a>
                     <a href="/collaborators" className="block hover:text-aura-leather">Collaborators</a>
                 </nav>
             )}

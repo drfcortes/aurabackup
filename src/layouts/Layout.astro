@@ -1,8 +1,8 @@
 ---
 import NavbarResponsive from '../components/NavbarResponsive.jsx';
+import ToastContainer from '../components/ToastContainer.jsx'; // 🔔 NUEVO
 import "../styles/styles.css";
 ---
-
 
 <html lang="en">
 <head>
@@ -31,7 +31,7 @@ import "../styles/styles.css";
 <body class="font-sans text-base text-[#2b361c] bg-[#fefae3]">
 <!-- ✅ Header modernizado -->
 <NavbarResponsive client:load />
-
+<ToastContainer client:load />
 <!-- ✅ Contenido principal -->
 <main class="max-w-5xl mx-auto px-6 py-8">
     <slot />

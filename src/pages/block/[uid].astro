@@ -1,0 +1,31 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import AuraBlockViewer from '../../components/AuraBlockViewer.jsx';
+
+const { uid } = Astro.params;
+
+let block = null;
+
+try {
+    const res = await fetch(`https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/getAuraBlockByUID/${uid}`);
+
+    if (res.ok) {
+        const data = await res.json();
+        block = data?.Item ?? data;
+    }
+} catch (err) {
+    console.error("❌ Error fetching block:", err);
+}
+---
+
+<Layout>
+    <main class="p-8 max-w-4xl mx-auto space-y-4">
+        <h1 class="text-3xl font-bold text-auraWine">AURA Block Archive</h1>
+
+        {block ? (
+                <AuraBlockViewer uid={uid} block={block} client:load />
+        ) : (
+                <p class="text-red-600">⚠️ No block found for UID: {uid}</p>
+        )}
+    </main>
+</Layout>
