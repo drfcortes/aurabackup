@@ -13,31 +13,23 @@ export default function TypedMessage() {
         <span>
       <ReactTyped
           strings={[
-              `ChatGPT, please use this Aura <span class="typed-block-word">block</span> to generate the content response based on the prompt field.`
+              `ChatGPT, please use this Aura <a href="/generate" class="typed-block-link">block</a> to generate the content response based on the prompt field.`
           ]}
           typeSpeed={45}
           backSpeed={25}
           loop
-          contentType="html"
+          contentType="html" // ← Permite usar HTML dentro del texto
       />
-            {/* Enlace invisible pero encima de la palabra "block" */}
-            <a
-                href="/generate"
-                className="typed-block-link"
-            >
-        block
-      </a>
 
       <style jsx>{`
         .typed-block-link {
-          position: relative;
-          left: -48px; /* ajusta según el ancho de la palabra */
-          color: #b17036;
+          color: #b17036; /* aura-leather */
           text-decoration: none;
+          font-weight: bold;
           cursor: pointer;
         }
-        .typed-block-word {
-          color: #b17036;
+        .typed-block-link:hover {
+          color: #d4a369; /* aura-sepia */
         }
       `}</style>
     </span>
