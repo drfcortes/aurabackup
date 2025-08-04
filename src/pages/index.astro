@@ -4,24 +4,36 @@ import TypedMessage from '../components/TypedMessage.jsx';
 ---
 
 <Layout>
-    <main class="p-8 max-w-4xl mx-auto text-center text-[#2b361c] space-y-8">
+    <main class="p-8 max-w-4xl mx-auto text-center">
 
-        <!-- Animación -->
-        <TypedMessage client:load />
+        <!-- Simulación de ventana -->
+        <div class="bg-aura-soft rounded-lg shadow-lg border border-aura-beige overflow-hidden w-full max-w-2xl mx-auto">
 
-        <!-- Título -->
-        <h1 class="text-5xl font-bold text-[#636b3f]">
-            The AURA Initiative
-        </h1>
+            <!-- Barra superior de ventana -->
+            <div class="flex items-center px-4 py-2 bg-aura-cream border-b border-aura-beige">
+                <div class="flex space-x-2">
+                    <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                    <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                    <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                </div>
+                <span class="flex-1 text-center text-sm text-aura-gray font-mono">aura-typing</span>
+            </div>
 
-        <!-- Introducción -->
-        <p class="text-lg leading-relaxed">
-            Over the past decade, the rapid development and adoption of generative artificial intelligence (AI) tools has transformed how knowledge is produced, shared, and interpreted across academic, professional, and creative domains. While these technologies offer powerful capabilities for automation and augmentation, their widespread use has introduced significant challenges regarding authorship, transparency, and intellectual accountability.
+            <!-- Área de animación -->
+            <div class="p-6 bg-aura-soft text-left font-mono text-lg text-aura-deep">
+                <TypedMessage />
+            </div>
+        </div>
+
+        <!-- Título debajo -->
+        <h1 class="text-4xl font-bold text-aura-green mt-10 mb-6">The AURA Initiative</h1>
+
+        <!-- Texto introductorio -->
+        <p class="text-aura-deep mb-4">
+            Transparent and verifiable reporting of AI-assisted content.
         </p>
-
-        <p class="text-lg leading-relaxed">
-            The AURA Protocol (Attribution & Usage Reporting for AI) emerges as a response to this critical moment. It proposes a structured, standardized framework to declare, document, and trace AI-assisted contributions in a verifiable and reproducible manner.
+        <p class="text-aura-deep">
+            The AURA Protocol (Attribution & Usage Reporting for AI) provides a structured, standardized framework to declare, document, and trace AI-assisted contributions in a verifiable manner.
         </p>
-
     </main>
 </Layout>

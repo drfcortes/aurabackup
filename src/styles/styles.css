@@ -2,11 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Estilos globales para texto justificado === */
+/* === Estilos globales para texto alineado a la izquierda === */
 
 body {
-    text-align: justify;
-    text-justify: inter-word;
+    text-align: left; /* Ya no justificado */
     font-size: 1.125rem; /* equivalente a Tailwind text-base modificado */
     line-height: 1.75;   /* más respiración en párrafos */
     font-family: 'Noto Sans', sans-serif;
@@ -27,14 +26,7 @@ p {
     margin-bottom: 1.25rem;
 }
 
-/* Enlaces con subrayado tenue y buen contraste */
-a {
-    text-decoration: underline dotted;
-    text-underline-offset: 1px;
-    color: inherit;
-}
-
-/* Justificación como clase utilitaria opcional */
+/* Clase opcional para justificado */
 .text-justify-aura {
     text-align: justify;
     text-justify: inter-word;
