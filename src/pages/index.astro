@@ -1,36 +1,39 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import TypedMessage from '../components/TypedMessage.jsx';
+import Typed from '../components/TypedMessage.jsx';
 ---
 
 <Layout>
-    <main class="p-8 max-w-4xl mx-auto text-center">
+    <main class="p-6 sm:p-12 max-w-4xl mx-auto flex flex-col items-center space-y-8">
 
-        <!-- Simulación de ventana -->
-        <div class="bg-aura-soft rounded-lg shadow-lg border border-aura-beige overflow-hidden w-full max-w-2xl mx-auto">
-
-            <!-- Barra superior de ventana -->
-            <div class="flex items-center px-4 py-2 bg-aura-cream border-b border-aura-beige">
-                <div class="flex space-x-2">
+        <!-- Ventana simulada -->
+        <div class="bg-aura-soft rounded-lg shadow-lg w-full sm:w-3/4 border border-aura-beige overflow-hidden">
+            <!-- Barra de ventana -->
+            <div class="flex items-center px-4 py-2 bg-aura-beige border-b border-aura-gray/20">
+                <div class="flex space-x-2 mr-4">
                     <span class="w-3 h-3 rounded-full bg-red-500"></span>
                     <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
                     <span class="w-3 h-3 rounded-full bg-green-500"></span>
                 </div>
-                <span class="flex-1 text-center text-sm text-aura-gray font-mono">AURA protocol</span>
+                <span class="text-sm text-aura-deep font-semibold">AURA protocol</span>
             </div>
 
-            <!-- Área de animación -->
-            <div class="p-6 bg-aura-soft text-left font-mono text-lg text-aura-deep">
-                <TypedMessage client:load />
+            <!-- Contenido animado -->
+            <div class="p-6 text-lg sm:text-xl font-mono text-aura-deep min-h-[120px] flex items-center">
+                <Typed />
             </div>
         </div>
 
-             <!-- Texto introductorio -->
-        <p class="text-aura-deep mb-4">
+        <!-- Descripción corta -->
+        <p class="text-center text-lg sm:text-xl text-aura-deep font-medium">
             Transparent and verifiable reporting of AI-assisted content.
         </p>
-        <p class="text-aura-deep">
-            The AURA Protocol (Attribution & Usage Reporting for AI) provides a structured, standardized framework to declare, document, and trace AI-assisted contributions in a verifiable manner.
+
+        <!-- Párrafo largo -->
+        <p class="text-center text-base text-aura-deep leading-relaxed max-w-3xl">
+            The AURA Protocol (Attribution & Usage Reporting for AI) provides a structured, standardized framework
+            to declare, document, and trace AI-assisted contributions in a verifiable manner.
         </p>
+
     </main>
 </Layout>
