@@ -23,23 +23,23 @@ export default function NavbarResponsive() {
                 </button>
 
                 {/* Menú horizontal visible en escritorio */}
-                <nav className="hidden md:flex space-x-6 text-sm font-medium text-aura-deep">
-                    <a href="/" className="hover:text-aura-leather">Home</a>
-                    <a href="/generate" className="hover:text-aura-leather">Generate</a>
-                    <a href="/search" className="hover:text-aura-leather">Lookup</a>
-                    <a href="/vision" className="hover:text-aura-leather">Vision</a>
-                    <a href="/collaborators" className="hover:text-aura-leather">Collaborators</a>
+                <nav className="hidden md:flex space-x-6 text-lg font-semibold text-aura-deep">
+                    <a href="/" className="hover:text-aura-leather transition-colors duration-300">Home</a>
+                    <a href="/generate" className="hover:text-aura-leather transition-colors duration-300">Generate</a>
+                    <a href="/search" className="hover:text-aura-leather transition-colors duration-300">Lookup</a>
+                    <a href="/vision" className="hover:text-aura-leather transition-colors duration-300">Vision</a>
+                    <a href="/collaborators" className="hover:text-aura-leather transition-colors duration-300">Collaborators</a>
                 </nav>
             </div>
 
             {/* Menú móvil */}
             {isOpen && (
-                <nav className="md:hidden mt-4 space-y-2 text-sm font-medium text-aura-deep">
-                    <a href="/" className="block hover:text-aura-leather">Home</a>
-                    <a href="/generate" className="block hover:text-aura-leather">Generate</a>
-                    <a href="/search" className="block hover:text-aura-leather">Lookup</a>
-                    <a href="/vision" className="block hover:text-aura-leather">Vision</a>
-                    <a href="/collaborators" className="block hover:text-aura-leather">Collaborators</a>
+                <nav className="md:hidden mt-4 space-y-2 text-lg font-semibold text-aura-deep">
+                    <a href="/" className="block hover:text-aura-leather transition-colors duration-300">Home</a>
+                    <a href="/generate" className="block hover:text-aura-leather transition-colors duration-300">Generate</a>
+                    <a href="/search" className="block hover:text-aura-leather transition-colors duration-300">Lookup</a>
+                    <a href="/vision" className="block hover:text-aura-leather transition-colors duration-300">Vision</a>
+                    <a href="/collaborators" className="block hover:text-aura-leather transition-colors duration-300">Collaborators</a>
                 </nav>
             )}
         </header>
