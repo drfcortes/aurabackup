@@ -1,14 +1,13 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Typed from '../components/TypedMessage.jsx';
+import TypedMessage from '../components/TypedMessage.jsx';
 ---
 
 <Layout>
-    <main class="p-6 sm:p-12 max-w-4xl mx-auto flex flex-col items-center space-y-8">
+    <main class="p-8 max-w-4xl mx-auto text-center">
 
         <!-- Ventana simulada -->
-        <div class="bg-aura-soft rounded-lg shadow-lg w-full sm:w-3/4 border border-aura-beige overflow-hidden">
-            <!-- Barra de ventana -->
+        <div class="bg-aura-soft rounded-lg shadow-lg border border-aura-beige overflow-hidden w-full max-w-2xl mx-auto">
             <div class="flex items-center px-4 py-2 bg-aura-beige border-b border-aura-gray/20">
                 <div class="flex space-x-2 mr-4">
                     <span class="w-3 h-3 rounded-full bg-red-500"></span>
@@ -20,20 +19,13 @@ import Typed from '../components/TypedMessage.jsx';
 
             <!-- Contenido animado -->
             <div class="p-6 text-lg sm:text-xl font-mono text-aura-deep min-h-[120px] flex items-center">
-                <Typed />
+                <TypedMessage client:load />
             </div>
         </div>
 
-        <!-- Descripción corta -->
-        <p class="text-center text-lg sm:text-xl text-aura-deep font-medium">
+        <!-- Texto debajo -->
+        <p class="mt-6 text-lg text-aura-deep">
             Transparent and verifiable reporting of AI-assisted content.
         </p>
-
-        <!-- Párrafo largo -->
-        <p class="text-center text-base text-aura-deep leading-relaxed max-w-3xl">
-            The AURA Protocol (Attribution & Usage Reporting for AI) provides a structured, standardized framework
-            to declare, document, and trace AI-assisted contributions in a verifiable manner.
-        </p>
-
     </main>
 </Layout>
