@@ -17,6 +17,7 @@ export default function TypedMessage() {
             typeSpeed={45}
             backSpeed={25}
             loop
+            contentType="html"  // ✅ Permite que el enlace sea HTML real y clickeable
         />
     );
 }
