@@ -1,6 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Typed from 'react-typed';
+import TypedMessage from '../components/TypedMessage.jsx';
 ---
 
 <Layout>
@@ -14,15 +14,7 @@ import Typed from 'react-typed';
         </p>
 
         <div class="text-xl font-mono text-auraWine">
-            <Typed
-                    client:load
-                    strings={[
-                        "ChatGPT, please use this Aura block to generate the content response based on the prompt field."
-                    ]}
-                    typeSpeed={45}
-                    backSpeed={25}
-                    loop
-            />
+            <TypedMessage client:load />
         </div>
     </main>
 </Layout>
