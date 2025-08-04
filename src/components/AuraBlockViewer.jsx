@@ -12,8 +12,12 @@ export default function AuraBlockViewer({ uidFromPage }) {
             try {
                 const res = await fetch(`https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/getAuraBlockByUID/${uid}`);
                 const data = await res.json();
-                if (data?.uid) {
-                    setBlock(data);
+                const blockData = data?.Item ?? data;
+
+                if (blockData?.uid) {
+                    setBlock(blockData);
+                } else {
+                    console.warn("❌ No valid block found in response:", data);
                 }
             } catch (err) {
                 console.error("Error fetching block:", err);
