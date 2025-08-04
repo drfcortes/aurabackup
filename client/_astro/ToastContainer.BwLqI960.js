@@ -1,0 +1,1 @@
+import{j as o}from"./jsx-runtime.D_zvdyIk.js";import"./index.RH_Wq4ov.js";import{O as r}from"./index.ziJcsk7A.js";function a(){return o.jsx(r,{position:"top-right",toastOptions:{duration:3e3,style:{background:"#2b361c",color:"#fefae3",fontSize:"0.9rem",borderRadius:"0.5rem"},iconTheme:{primary:"#34d399",secondary:"#fefae3"}}})}export{a as default};
