@@ -1,9 +1,9 @@
 import React from "react";
-import Typed from "react-typed";
+import { ReactTyped } from "react-typed";
 
 export default function TypedMessage() {
     return (
-        <Typed
+        <ReactTyped
             strings={[
                 "ChatGPT, please use this Aura block to generate the content response based on the prompt field."
             ]}
