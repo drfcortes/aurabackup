@@ -4,17 +4,24 @@ import TypedMessage from '../components/TypedMessage.jsx';
 ---
 
 <Layout>
-    <main class="p-8 max-w-4xl mx-auto text-center text-[#2b361c]">
-        <h1 class="text-5xl font-bold text-[#636b3f] mb-6">
+    <main class="p-8 max-w-4xl mx-auto text-center text-[#2b361c] space-y-8">
+
+        <!-- Animación -->
+        <TypedMessage client:load />
+
+        <!-- Título -->
+        <h1 class="text-5xl font-bold text-[#636b3f]">
             The AURA Initiative
         </h1>
 
-        <p class="mb-6 text-lg text-[#2b361c]">
-            Transparent and verifiable reporting of AI-assisted content.
+        <!-- Introducción -->
+        <p class="text-lg leading-relaxed">
+            Over the past decade, the rapid development and adoption of generative artificial intelligence (AI) tools has transformed how knowledge is produced, shared, and interpreted across academic, professional, and creative domains. While these technologies offer powerful capabilities for automation and augmentation, their widespread use has introduced significant challenges regarding authorship, transparency, and intellectual accountability.
         </p>
 
-        <div class="text-xl font-mono text-auraWine">
-            <TypedMessage client:load />
-        </div>
+        <p class="text-lg leading-relaxed">
+            The AURA Protocol (Attribution & Usage Reporting for AI) emerges as a response to this critical moment. It proposes a structured, standardized framework to declare, document, and trace AI-assisted contributions in a verifiable and reproducible manner.
+        </p>
+
     </main>
 </Layout>
