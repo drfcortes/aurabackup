@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 
 // Obtener el parámetro de la URL
-const { email } = Astro.params;
+const email = decodeURIComponent(Astro.params.email);
 
 // Llamar a tu API Gateway para buscar por email
 const apiUrl = `https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/searchAuraBlocks?email=${encodeURIComponent(email)}`;
