@@ -40,25 +40,32 @@ export default function NavbarResponsive() {
 
                     {/* Links */}
                     <div className="hidden md:flex space-x-4">
-                        <a href="/generate" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        <Link href="/" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                            Home
+                        </Link>
+                        <Link href="/generate" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Generate
-                        </a>
-                        <a href="/vision" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </Link>
+                        <Link href="/search" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                            AURA Searcher
+                        </Link>
+                        <Link href="/vision" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Vision
-                        </a>
-                        <a href="/collaborators" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </Link>
+                        <Link href="/collaborators" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Collaborators
-                        </a>
+                        </Link>
                     </div>
+
 
                     {/* Toggle Switch */}
                     <div
                         onClick={toggleDarkMode}
-                        className="relative w-7 h-3 bg-gray-300 dark:bg-gray-700 rounded-full p-1 cursor-pointer transition-colors duration-300"
+                        className={`w-10 h-5 flex items-center bg-gray-300 dark:bg-gray-700 rounded-full p-0.5 cursor-pointer transition-colors duration-300`}
                     >
                         <div
-                            className={`bg-white dark:bg-aura-leather w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out ${
-                                darkMode ? "translate-x-7" : ""
+                            className={`bg-white dark:bg-aura-leather w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${
+                                darkMode ? "translate-x-5" : ""
                             }`}
                         ></div>
                     </div>
@@ -76,17 +83,24 @@ export default function NavbarResponsive() {
             {/* Menú desplegable móvil */}
             {isOpen && (
                 <div className="md:hidden bg-aura-soft dark:bg-aura-deep p-4 space-y-2">
-                    <a href="/generate" className="block text-aura-deep dark:text-aura-cream">
+                    <Link href="/" className="block text-aura-deep dark:text-aura-cream">
+                        Home
+                    </Link>
+                    <Link href="/generate" className="block text-aura-deep dark:text-aura-cream">
                         Generate
-                    </a>
-                    <a href="/vision" className="block text-aura-deep dark:text-aura-cream">
+                    </Link>
+                    <Link href="/search" className="block text-aura-deep dark:text-aura-cream">
+                        AURA Searcher
+                    </Link>
+                    <Link href="/vision" className="block text-aura-deep dark:text-aura-cream">
                         Vision
-                    </a>
-                    <a href="/collaborators" className="block text-aura-deep dark:text-aura-cream">
+                    </Link>
+                    <Link href="/collaborators" className="block text-aura-deep dark:text-aura-cream">
                         Collaborators
-                    </a>
+                    </Link>
                 </div>
             )}
+
         </nav>
     );
 }
