@@ -40,23 +40,22 @@ export default function NavbarResponsive() {
 
                     {/* Links */}
                     <div className="hidden md:flex space-x-4">
-                        <Link href="/" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        <a href="/" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Home
-                        </Link>
-                        <Link href="/generate" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </a>
+                        <a href="/generate" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Generate
-                        </Link>
-                        <Link href="/search" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </a>
+                        <a href="/search" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             AURA Searcher
-                        </Link>
-                        <Link href="/vision" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </a>
+                        <a href="/vision" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Vision
-                        </Link>
-                        <Link href="/collaborators" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
+                        </a>
+                        <a href="/collaborators" className="text-aura-deep dark:text-aura-cream hover:text-aura-leather">
                             Collaborators
-                        </Link>
+                        </a>
                     </div>
-
 
                     {/* Toggle Switch */}
                     <div
@@ -83,24 +82,23 @@ export default function NavbarResponsive() {
             {/* Menú desplegable móvil */}
             {isOpen && (
                 <div className="md:hidden bg-aura-soft dark:bg-aura-deep p-4 space-y-2">
-                    <Link href="/" className="block text-aura-deep dark:text-aura-cream">
+                    <a href="/" className="block text-aura-deep dark:text-aura-cream">
                         Home
-                    </Link>
-                    <Link href="/generate" className="block text-aura-deep dark:text-aura-cream">
+                    </a>
+                    <a href="/generate" className="block text-aura-deep dark:text-aura-cream">
                         Generate
-                    </Link>
-                    <Link href="/search" className="block text-aura-deep dark:text-aura-cream">
+                    </a>
+                    <a href="/search" className="block text-aura-deep dark:text-aura-cream">
                         AURA Searcher
-                    </Link>
-                    <Link href="/vision" className="block text-aura-deep dark:text-aura-cream">
+                    </a>
+                    <a href="/vision" className="block text-aura-deep dark:text-aura-cream">
                         Vision
-                    </Link>
-                    <Link href="/collaborators" className="block text-aura-deep dark:text-aura-cream">
+                    </a>
+                    <a href="/collaborators" className="block text-aura-deep dark:text-aura-cream">
                         Collaborators
-                    </Link>
+                    </a>
                 </div>
             )}
-
         </nav>
     );
 }
