@@ -1,10 +1,10 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-// Obtener el parámetro de la URL
+// Obtener y decodificar el email de la URL
 const email = decodeURIComponent(Astro.params.email);
 
-// Llamar a tu API Gateway para buscar por email
+// Llamar a la API de búsqueda
 const apiUrl = `https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/searchAuraBlocks?email=${encodeURIComponent(email)}`;
 
 let blocks = [];
@@ -21,44 +21,147 @@ try {
 ---
 
 <Layout>
-    <main class="p-8 max-w-5xl mx-auto text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
-        <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow mb-6">
-            Blocks for <span class="text-aura-leather dark:text-aura-yellow">{email}</span>
-        </h1>
+    <main class="p-8 max-w-6xl mx-auto text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
+            <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow">
+                Blocks for <span class="text-aura-leather dark:text-aura-yellow">{email}</span>
+            </h1>
+            {blocks.length > 0 && (
+                    <button
+                            id="downloadJsonBtn"
+                            class="mt-4 sm:mt-0 bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                    >
+                        Download JSON
+                    </button>
+            )}
+        </div>
 
         {blocks.length > 0 ? (
-                <div class="overflow-x-auto">
-                    <table class="min-w-full border border-aura-olive dark:border-aura-gray rounded-xl">
-                        <thead class="bg-aura-beige dark:bg-aura-olive">
-                        <tr>
-                            <th class="px-4 py-2 text-left">UID</th>
-                            <th class="px-4 py-2 text-left">Model</th>
-                            <th class="px-4 py-2 text-left">Provider</th>
-                            <th class="px-4 py-2 text-left">Timestamp</th>
-                            <th class="px-4 py-2 text-left">License</th>
-                            <th class="px-4 py-2 text-left">Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {blocks.map(block => (
-                                <tr class="border-t border-aura-olive dark:border-aura-gray hover:bg-aura-beige dark:hover:bg-aura-olive">
-                                    <td class="px-4 py-2">{block.uid}</td>
-                                    <td class="px-4 py-2">{block.model}</td>
-                                    <td class="px-4 py-2">{block.provider}</td>
-                                    <td class="px-4 py-2">{block.timestamp}</td>
-                                    <td class="px-4 py-2">{block.license}</td>
-                                    <td class="px-4 py-2">
-                                        <a href={`/block/${block.uid}`} class="text-aura-green dark:text-aura-yellow hover:underline">
-                                            View
-                                        </a>
-                                    </td>
-                                </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </div>
+                <>
+                    <!-- Filtro -->
+                    <div class="mb-4">
+                        <input
+                                id="filterInput"
+                                type="text"
+                                placeholder="Filter by model or provider..."
+                                class="w-full sm:w-1/2 px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-md bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
+                        />
+                    </div>
+
+                    <!-- Tabla -->
+                    <div class="overflow-x-auto">
+                        <table id="blocksTable" class="min-w-full border border-aura-olive dark:border-aura-gray rounded-xl shadow-lg">
+                            <thead class="bg-aura-beige dark:bg-aura-olive">
+                            <tr class="text-aura-deep dark:text-aura-cream">
+                                <th class="px-4 py-3 text-left font-semibold">UID</th>
+                                <th class="px-4 py-3 text-left font-semibold">Model</th>
+                                <th class="px-4 py-3 text-left font-semibold">Provider</th>
+                                <th class="px-4 py-3 text-left font-semibold">Timestamp</th>
+                                <th class="px-4 py-3 text-left font-semibold">License</th>
+                                <th class="px-4 py-3 text-left font-semibold">Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="blocksTableBody">
+                            {blocks.map(block => (
+                                    <tr class="border-t border-aura-olive dark:border-aura-gray hover:bg-aura-green/10 dark:hover:bg-aura-yellow/10 transition-colors">
+                                        <td class="px-4 py-3 font-mono">{block.uid}</td>
+                                        <td class="px-4 py-3">{block.model}</td>
+                                        <td class="px-4 py-3">{block.provider}</td>
+                                        <td class="px-4 py-3">{new Date(block.timestamp).toLocaleString()}</td>
+                                        <td class="px-4 py-3">{block.license}</td>
+                                        <td class="px-4 py-3">
+                                            <a
+                                                    href={`/block/${block.uid}`}
+                                                    class="inline-block bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-1 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                                            >
+                                                View
+                                            </a>
+                                        </td>
+                                    </tr>
+                            ))}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginación -->
+                    <div id="paginationControls" class="flex justify-center mt-6 space-x-2"></div>
+                </>
         ) : (
-                <p class="text-aura-gray dark:text-aura-cream">No blocks found for this email.</p>
+                <div class="p-6 bg-aura-beige dark:bg-aura-olive rounded-xl border border-aura-olive dark:border-aura-gray text-center">
+                    <p class="text-lg">No blocks found for this email.</p>
+                </div>
         )}
     </main>
+
+    <!-- Script para filtro, paginación y descarga -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const rows = Array.from(document.querySelectorAll("#blocksTableBody tr"));
+            const filterInput = document.getElementById("filterInput");
+            const paginationControls = document.getElementById("paginationControls");
+            const downloadBtn = document.getElementById("downloadJsonBtn");
+
+            let currentPage = 1;
+            const rowsPerPage = 10;
+
+            function renderTable() {
+                const filterValue = filterInput.value.toLowerCase();
+                const filteredRows = rows.filter(row => {
+                    const model = row.cells[1].textContent.toLowerCase();
+                    const provider = row.cells[2].textContent.toLowerCase();
+                    return model.includes(filterValue) || provider.includes(filterValue);
+                });
+
+                const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
+                paginationControls.innerHTML = "";
+
+                // Mostrar solo las filas de la página actual
+                rows.forEach(row => row.style.display = "none");
+                filteredRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+                    .forEach(row => row.style.display = "");
+
+                // Controles de paginación
+                for (let i = 1; i <= totalPages; i++) {
+                    const btn = document.createElement("button");
+                    btn.textContent = i;
+                    btn.className = "px-3 py-1 rounded border border-aura-olive dark:border-aura-gray hover:bg-aura-green/20 dark:hover:bg-aura-yellow/20";
+                    if (i === currentPage) {
+                        btn.classList.add("bg-aura-green", "dark:bg-aura-yellow", "text-white", "dark:text-aura-deep");
+                    }
+                    btn.addEventListener("click", () => {
+                        currentPage = i;
+                        renderTable();
+                    });
+                    paginationControls.appendChild(btn);
+                }
+            }
+
+            // Filtro en tiempo real
+            filterInput?.addEventListener("input", () => {
+                currentPage = 1;
+                renderTable();
+            });
+
+            // Descargar JSON
+            downloadBtn?.addEventListener("click", () => {
+                const data = rows.map(row => ({
+                    uid: row.cells[0].textContent,
+                    model: row.cells[1].textContent,
+                    provider: row.cells[2].textContent,
+                    timestamp: row.cells[3].textContent,
+                    license: row.cells[4].textContent
+                }));
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `aura_blocks_${Date.now()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            });
+
+            renderTable();
+        });
+    </script>
 </Layout>
