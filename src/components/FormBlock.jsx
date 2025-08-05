@@ -1,4 +1,4 @@
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import React, { useState } from "react";
 import generateUID from "../utils/generateUID";
 import generateTimestamp from "../utils/generateTimestamp";
@@ -30,34 +30,22 @@ const MODELS = [
     { name: "Other", provider: "" }
 ];
 
-// 🔹 Función para enriquecer bloque con metadatos extra
+// Extra metadata
 async function enrichBlockData(block) {
-    // Idioma
     block.language = navigator.language || null;
-
-    // Info del navegador
     block.browser_info = navigator.userAgent || null;
-
-    // País por IP
     try {
         const res = await fetch("https://ipapi.co/json/");
         if (res.ok) {
             const data = await res.json();
             block.country = data.country_code || null;
         }
-    } catch (e) {
-        console.warn("No se pudo obtener el país");
+    } catch {
+        console.warn("Could not fetch country");
     }
-
-    // Tipo de contenido (por ahora "text" fijo)
     block.content_type = "text";
-
-    // Contexto de generación (puedes cambiarlo luego a selector)
     block.generation_context = "general";
-
-    // Imagen (por ahora null hasta implementar subida)
     block.image_url = null;
-
     return block;
 }
 
@@ -66,11 +54,13 @@ export default function FormBlock() {
         model: "",
         provider: "",
         prompt: "",
+        output_text: "",
         user_edit: false,
         notes: "",
         license: "CC-BY-4.0",
         email: ""
     });
+
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [uid] = useState(generateUID());
     const [timestamp] = useState(generateTimestamp());
@@ -100,6 +90,7 @@ export default function FormBlock() {
             model: formData.model === "Other" ? customModel : formData.model,
             provider: formData.provider,
             prompt: formData.prompt,
+            output_text: formData.output_text || null,
             timestamp,
             user_edit: formData.user_edit,
             notes: formData.notes,
@@ -108,15 +99,12 @@ export default function FormBlock() {
             uid
         };
 
-        // 🔹 Enriquecer con metadatos automáticos
         block = await enrichBlockData(block);
-
         const hash = await computeContentHash(block);
         block.content_hash = hash;
 
         setGeneratedBlock(block);
         setContentHash(hash);
-
         window.dispatchEvent(new CustomEvent("auraBlockGenerated", { detail: block }));
     };
 
@@ -125,21 +113,14 @@ export default function FormBlock() {
             alert("⚠️ Please generate the block first.");
             return;
         }
-
         setIsSubmitting(true);
-
         try {
             const res = await submitAuraBlock(generatedBlock);
-
             toast.success("✅ Successfully submitted to the AURA Archive");
-
-            // Guardar el bloque en localStorage para acceso inmediato en la vista
             localStorage.setItem("lastGeneratedBlock", JSON.stringify(generatedBlock));
-
             setTimeout(() => {
                 window.location.href = `/block/${res.uid}`;
             }, 1500);
-
         } catch (err) {
             console.error(err);
             toast.error("❌ Submission failed. Please try again.");
@@ -147,6 +128,153 @@ export default function FormBlock() {
         }
     };
 
-    // 📌 Resto del JSX queda igual (UI original)...
-    // Copia todo tu render JSX original aquí
+    return (
+        <div className="p-8 bg-aura-soft dark:bg-aura-deep shadow-md rounded-2xl max-w-3xl mx-auto space-y-6 text-aura-deep dark:text-aura-cream">
+            <h1 className="text-3xl font-bold text-aura-green dark:text-aura-yellow">Generate AURA Block</h1>
+
+            {/* Model */}
+            <div>
+                <label className="block font-medium mb-1">AI Model Used <span className="text-red-500">*</span></label>
+                <p className="text-sm mb-2">Select the AI model you used to generate this content.</p>
+                <select
+                    className="w-full border rounded-lg p-2 bg-white dark:bg-aura-deep"
+                    value={formData.model}
+                    onChange={handleModelChange}
+                >
+                    <option value="">Select a model</option>
+                    {MODELS.map((m, i) => (
+                        <option key={i} value={m.name}>{m.name}</option>
+                    ))}
+                </select>
+                {formData.model === "Other" && (
+                    <input
+                        type="text"
+                        placeholder="Custom model name"
+                        className="w-full border rounded-lg p-2 mt-2"
+                        value={customModel}
+                        onChange={(e) => setCustomModel(e.target.value)}
+                    />
+                )}
+            </div>
+
+            {/* Provider */}
+            {formData.provider && (
+                <div>
+                    <label className="block font-medium mb-1">Provider</label>
+                    <input
+                        className="w-full border rounded-lg p-2 bg-gray-100 dark:bg-aura-gray"
+                        value={formData.provider}
+                        disabled
+                    />
+                </div>
+            )}
+
+            {/* Prompt */}
+            <div>
+                <label className="block font-medium mb-1">Prompt <span className="text-red-500">*</span></label>
+                <p className="text-sm mb-2">Write the exact prompt used to generate the output.</p>
+                <textarea
+                    className="w-full border rounded-lg p-2"
+                    name="prompt"
+                    value={formData.prompt}
+                    onChange={handleChange}
+                />
+            </div>
+
+            {/* Output */}
+            <div>
+                <label className="block font-medium mb-1">Output Text</label>
+                <p className="text-sm mb-2">Describe or paste the generated output from the AI model.</p>
+                <textarea
+                    className="w-full border rounded-lg p-2"
+                    name="output_text"
+                    value={formData.output_text}
+                    onChange={handleChange}
+                />
+            </div>
+
+            {/* User edit */}
+            <div className="flex items-center space-x-2">
+                <input
+                    type="checkbox"
+                    name="user_edit"
+                    checked={formData.user_edit}
+                    onChange={handleChange}
+                />
+                <label>This content was manually edited after generation</label>
+            </div>
+
+            {/* Notes */}
+            <div>
+                <label className="block font-medium mb-1">Notes (optional)</label>
+                <p className="text-sm mb-2">Any additional observations or context.</p>
+                <textarea
+                    className="w-full border rounded-lg p-2"
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleChange}
+                />
+            </div>
+
+            {/* Email */}
+            <div>
+                <label className="block font-medium mb-1">Email (optional)</label>
+                <p className="text-sm mb-2 text-aura-gray">Recommended if you want to track all your generated blocks in the future.</p>
+                <input
+                    className="w-full border rounded-lg p-2"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                />
+            </div>
+
+            {/* UID / Timestamp / License / Hash */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label className="block font-medium mb-1">UID</label>
+                    <input className="w-full border rounded-lg p-2 bg-gray-100" disabled value={uid} />
+                </div>
+                <div>
+                    <label className="block font-medium mb-1">Timestamp</label>
+                    <input className="w-full border rounded-lg p-2 bg-gray-100" disabled value={timestamp} />
+                </div>
+                <div>
+                    <label className="block font-medium mb-1">License</label>
+                    <input className="w-full border rounded-lg p-2 bg-gray-100" disabled value={formData.license} />
+                </div>
+                <div>
+                    <label className="block font-medium mb-1">Content Hash</label>
+                    <input className="w-full border rounded-lg p-2 bg-gray-100" disabled value={contentHash} />
+                </div>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex gap-4 pt-4">
+                <button
+                    onClick={generateBlock}
+                    className="bg-aura-leather hover:bg-aura-green text-white px-6 py-2 rounded-full shadow"
+                >
+                    🔄 Generate Block
+                </button>
+                <button
+                    onClick={handleSubmit}
+                    disabled={isSubmitting}
+                    className={`bg-aura-green hover:bg-aura-deep text-white px-6 py-2 rounded-full shadow ${isSubmitting ? 'opacity-50' : ''}`}
+                >
+                    🚀 Submit to AURA Registry
+                </button>
+            </div>
+
+            {/* Preview */}
+            {generatedBlock && (
+                <div className="mt-6">
+                    <h2 className="text-lg font-semibold">Preview</h2>
+                    <pre className="bg-aura-beige dark:bg-aura-gray text-sm p-4 rounded-xl max-h-96 overflow-auto">
+                        {JSON.stringify(generatedBlock, null, 2)}
+                    </pre>
+                </div>
+            )}
+        </div>
+    );
 }
