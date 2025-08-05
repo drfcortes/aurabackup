@@ -1,0 +1,64 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// Obtener el parámetro de la URL
+const { email } = Astro.params;
+
+// Llamar a tu API Gateway para buscar por email
+const apiUrl = `https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/searchAuraBlocks?email=${encodeURIComponent(email)}`;
+
+let blocks = [];
+try {
+    const res = await fetch(apiUrl);
+    if (res.ok) {
+        blocks = await res.json();
+    } else {
+        console.error("Error fetching data:", res.status);
+    }
+} catch (err) {
+    console.error("Fetch error:", err);
+}
+---
+
+<Layout>
+    <main class="p-8 max-w-5xl mx-auto text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
+        <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow mb-6">
+            Blocks for <span class="text-aura-leather dark:text-aura-yellow">{email}</span>
+        </h1>
+
+        {blocks.length > 0 ? (
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-aura-olive dark:border-aura-gray rounded-xl">
+                        <thead class="bg-aura-beige dark:bg-aura-olive">
+                        <tr>
+                            <th class="px-4 py-2 text-left">UID</th>
+                            <th class="px-4 py-2 text-left">Model</th>
+                            <th class="px-4 py-2 text-left">Provider</th>
+                            <th class="px-4 py-2 text-left">Timestamp</th>
+                            <th class="px-4 py-2 text-left">License</th>
+                            <th class="px-4 py-2 text-left">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {blocks.map(block => (
+                                <tr class="border-t border-aura-olive dark:border-aura-gray hover:bg-aura-beige dark:hover:bg-aura-olive">
+                                    <td class="px-4 py-2">{block.uid}</td>
+                                    <td class="px-4 py-2">{block.model}</td>
+                                    <td class="px-4 py-2">{block.provider}</td>
+                                    <td class="px-4 py-2">{block.timestamp}</td>
+                                    <td class="px-4 py-2">{block.license}</td>
+                                    <td class="px-4 py-2">
+                                        <a href={`/block/${block.uid}`} class="text-aura-green dark:text-aura-yellow hover:underline">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+        ) : (
+                <p class="text-aura-gray dark:text-aura-cream">No blocks found for this email.</p>
+        )}
+    </main>
+</Layout>

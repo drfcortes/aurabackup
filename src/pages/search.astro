@@ -8,7 +8,7 @@ import Layout from '../layouts/Layout.astro';
 
         <section class="prose prose-lg max-w-none text-left mb-8">
             <p>
-                Enter the <strong>AURA Block UID</strong> to view its metadata and traceability record.
+                Enter the <strong>AURA Block UID</strong> or your <strong>email</strong> to view its metadata and traceability record.
                 AURA blocks are public records of AI-assisted content generation, including details like the model used,
                 prompts, timestamps, and licenses.
             </p>
@@ -22,31 +22,34 @@ import Layout from '../layouts/Layout.astro';
         </section>
 
         <section class="bg-aura-beige dark:bg-aura-olive p-6 rounded-xl shadow border border-aura-olive dark:border-aura-gray">
-            <h2 class="text-xl font-semibold text-aura-green dark:text-aura-yellow mb-4">Lookup by UID</h2>
+            <h2 class="text-xl font-semibold text-aura-green dark:text-aura-yellow mb-4">Lookup by UID or Email</h2>
 
             <form id="blockForm" class="space-y-4">
-                <label for="uidInput" class="block text-sm font-medium text-aura-gray dark:text-aura-cream">Enter the block UID:</label>
+                <label for="uidInput" class="block text-sm font-medium text-aura-gray dark:text-aura-cream">
+                    Enter the block UID or your registered email:
+                </label>
                 <input
                         id="uidInput"
                         type="text"
-                        placeholder="Example: AURA-2025-000001"
+                        placeholder="Example: AURA-2025-000001 or user@email.com"
                         class="w-full px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-md bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
                 />
                 <button
                         type="submit"
                         class="bg-aura-green dark:bg-aura-leather text-white px-6 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
                 >
-                    View Block
+                    Search
                 </button>
             </form>
 
             <div class="mt-6 text-sm text-aura-gray dark:text-aura-cream">
-                Example UID: <code class="bg-gray-100 dark:bg-aura-deep px-2 py-1 rounded">AURA-2025-000001</code>
+                Example UID: <code class="bg-gray-100 dark:bg-aura-deep px-2 py-1 rounded">AURA-2025-000001</code> <br>
+                Example Email: <code class="bg-gray-100 dark:bg-aura-deep px-2 py-1 rounded">example@email.com</code>
             </div>
         </section>
     </main>
 
-    <!-- ✅ Script funcional compatible con Astro -->
+    <!-- ✅ Script adaptado para UID o Email -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById("blockForm");
@@ -54,11 +57,22 @@ import Layout from '../layouts/Layout.astro';
 
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                const uid = input.value.trim();
-                if (uid) {
-                    window.location.href = `/block/${uid}`;
+                const value = input.value.trim();
+
+                if (!value) {
+                    alert("Please enter a UID or an Email.");
+                    return;
+                }
+
+                const isUID = /^AURA-\d{4}-\d{6}$/.test(value);
+                const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+
+                if (isUID) {
+                    window.location.href = `/block/${value}`;
+                } else if (isEmail) {
+                    window.location.href = `/blocks-by-email/${encodeURIComponent(value)}`;
                 } else {
-                    alert("Please enter a UID.");
+                    alert("Please enter a valid UID (AURA-YYYY-XXXXXX) or a valid Email.");
                 }
             });
         });
