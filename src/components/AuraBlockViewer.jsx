@@ -18,10 +18,9 @@ export default function AuraBlockViewer({ uidFromPage }) {
             if (!res.ok) throw new Error("Block not found or server error");
 
             const data = await res.json();
-            const blockData = data.Item || data; // 🔹 Soporta ambos formatos de respuesta
+            const blockData = data.Item || data;
             setBlock(blockData);
 
-            // 🔹 Generar referencia automáticamente
             const year = blockData.timestamp ? new Date(blockData.timestamp).getFullYear() : "n.d.";
             const ref = `${blockData.model || "Unknown Model"} (${year}). ${blockData.uid || "undefined"}. Retrieved from https://aurablock.org/block/${blockData.uid || ""}`;
             setAuraReference(ref);
@@ -37,19 +36,16 @@ export default function AuraBlockViewer({ uidFromPage }) {
 
     useEffect(() => {
         if (uidFromPage) {
-            // Revisar si el bloque recién generado está en localStorage
             const savedBlock = localStorage.getItem("lastGeneratedBlock");
             if (savedBlock) {
                 const parsed = JSON.parse(savedBlock);
                 if (parsed.uid === uidFromPage) {
                     setBlock(parsed);
-
                     const year = parsed.timestamp ? new Date(parsed.timestamp).getFullYear() : "n.d.";
                     const ref = `${parsed.model || "Unknown Model"} (${year}). ${parsed.uid || "undefined"}. Retrieved from https://aurablock.org/block/${parsed.uid || ""}`;
                     setAuraReference(ref);
-
-                    localStorage.removeItem("lastGeneratedBlock"); // limpiar
-                    return; // Evitar llamada innecesaria a la API
+                    localStorage.removeItem("lastGeneratedBlock");
+                    return;
                 }
             }
             fetchBlock(uidFromPage);
@@ -60,6 +56,13 @@ export default function AuraBlockViewer({ uidFromPage }) {
         if (!auraReference) return;
         navigator.clipboard.writeText(auraReference).then(() => {
             alert("AURA Reference copied to clipboard!");
+        });
+    };
+
+    const copyOutput = () => {
+        if (!block?.output_text) return;
+        navigator.clipboard.writeText(block.output_text).then(() => {
+            alert("Output copied to clipboard!");
         });
     };
 
@@ -121,13 +124,21 @@ export default function AuraBlockViewer({ uidFromPage }) {
                         </tbody>
                     </table>
 
-                    {/* Output expandible */}
+                    {/* Output expandible con botón de copiar */}
                     {block.output_text && (
-                        <details className="mt-3">
-                            <summary className="cursor-pointer text-aura-green dark:text-aura-yellow">Show Output</summary>
-                            <pre className="bg-aura-beige dark:bg-aura-gray p-3 rounded mt-2 whitespace-pre-wrap">
-                                {block.output_text}
-                            </pre>
+                        <details className="mt-3 rounded-lg border border-aura-olive dark:border-aura-gray">
+                            <summary className="cursor-pointer text-aura-green dark:text-aura-yellow px-4 py-2">
+                                Show Output
+                            </summary>
+                            <div className="bg-aura-beige dark:bg-aura-gray p-4 rounded-b-lg">
+                                <pre className="whitespace-pre-wrap text-sm">{block.output_text}</pre>
+                                <button
+                                    onClick={copyOutput}
+                                    className="mt-3 bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                                >
+                                    📋 Copy Output
+                                </button>
+                            </div>
                         </details>
                     )}
 
