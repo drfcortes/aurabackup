@@ -66,6 +66,13 @@ export default function AuraBlockViewer({ uidFromPage }) {
         });
     };
 
+    const copyRaw = () => {
+        if (!block) return;
+        navigator.clipboard.writeText(JSON.stringify(block, null, 2)).then(() => {
+            alert("AURA Raw+ copied to clipboard!");
+        });
+    };
+
     return (
         <div className="space-y-6 p-6 bg-aura-soft dark:bg-aura-deep rounded-xl shadow-lg border border-aura-beige dark:border-aura-gray">
             <h2 className="text-2xl font-bold text-aura-green dark:text-aura-yellow">
@@ -168,13 +175,23 @@ export default function AuraBlockViewer({ uidFromPage }) {
                         </button>
                     </div>
 
-                    {/* JSON crudo */}
-                    <h3 className="text-lg font-semibold text-aura-green dark:text-aura-yellow mt-6">
-                        Raw Metadata
-                    </h3>
-                    <pre className="bg-white dark:bg-aura-deep text-sm text-aura-black dark:text-aura-cream p-4 rounded-md border border-aura-beige dark:border-aura-gray max-h-[400px] overflow-auto">
-                        {JSON.stringify(block, null, 2)}
-                    </pre>
+                    {/* AURA Raw+ expandible */}
+                    <details className="mt-6 rounded-lg border border-aura-olive dark:border-aura-gray">
+                        <summary className="cursor-pointer text-aura-green dark:text-aura-yellow px-4 py-2">
+                            Show AURA Raw+
+                        </summary>
+                        <div className="bg-white dark:bg-aura-deep p-4 rounded-b-lg border-t border-aura-olive dark:border-aura-gray">
+                            <pre className="text-sm text-aura-black dark:text-aura-cream max-h-[400px] overflow-auto">
+                                {JSON.stringify(block, null, 2)}
+                            </pre>
+                            <button
+                                onClick={copyRaw}
+                                className="mt-3 bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                            >
+                                📋 Copy AURA Raw+
+                            </button>
+                        </div>
+                    </details>
                 </>
             )}
         </div>
