@@ -58,6 +58,7 @@ try {
                                 <th class="px-4 py-3 text-left font-semibold">Provider</th>
                                 <th class="px-4 py-3 text-left font-semibold">Timestamp</th>
                                 <th class="px-4 py-3 text-left font-semibold">License</th>
+                                <th class="px-4 py-3 text-left font-semibold">Reference</th>
                                 <th class="px-4 py-3 text-left font-semibold">Action</th>
                             </tr>
                             </thead>
@@ -69,6 +70,14 @@ try {
                                         <td class="px-4 py-3">{block.provider}</td>
                                         <td class="px-4 py-3">{new Date(block.timestamp).toLocaleString()}</td>
                                         <td class="px-4 py-3">{block.license}</td>
+                                        <td class="px-4 py-3">
+                                            <button
+                                                    class="bg-aura-green dark:bg-aura-leather text-white px-3 py-1 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
+                                                    onclick={`showAuraReference('${block.model}', '${block.timestamp}', '${block.uid}')`}
+                                            >
+                                                📄 View
+                                            </button>
+                                        </td>
                                         <td class="px-4 py-3">
                                             <a
                                                     href={`/block/${block.uid}`}
@@ -85,21 +94,39 @@ try {
 
                     <!-- Paginación -->
                     <div id="paginationControls" class="flex justify-center mt-6 space-x-2"></div>
+
+                    <!-- Modal Reference -->
+                    <div id="referenceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+                        <div class="bg-white dark:bg-aura-deep rounded-lg shadow-lg max-w-lg w-full p-6 text-aura-deep dark:text-aura-cream">
+                            <h2 class="text-xl font-bold mb-4 text-aura-green dark:text-aura-yellow">📄 AURA Reference</h2>
+                            <p class="text-sm mb-3">This is the recommended way to cite this AURA block in your documents.</p>
+                            <pre id="referenceText" class="bg-aura-beige dark:bg-aura-gray p-3 rounded-md text-sm whitespace-pre-wrap"></pre>
+                            <div class="flex justify-end gap-2 mt-4">
+                                <button id="copyReferenceBtn" class="bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition">📋 Copy</button>
+                                <button id="closeModalBtn" class="bg-gray-400 dark:bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 dark:hover:bg-gray-700 transition">Close</button>
+                            </div>
+                        </div>
+                    </div>
                 </>
         ) : (
-                <div class="p-6 bg-aura-beige dark:bg-aura-olive rounded-xl border border-aura-olive dark:border-aura-gray text-center">
+                <div class="p-6 bg-aura-beige dark:bg-aura-olive rounded-2xl border border-aura-olive dark:border-aura-gray text-center">
                     <p class="text-lg">No blocks found for this email.</p>
                 </div>
         )}
     </main>
 
-    <!-- Script para filtro, paginación y descarga -->
+    <!-- Script para filtro, paginación, descarga y referencia -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const rows = Array.from(document.querySelectorAll("#blocksTableBody tr"));
             const filterInput = document.getElementById("filterInput");
             const paginationControls = document.getElementById("paginationControls");
             const downloadBtn = document.getElementById("downloadJsonBtn");
+
+            const modal = document.getElementById("referenceModal");
+            const referenceText = document.getElementById("referenceText");
+            const copyBtn = document.getElementById("copyReferenceBtn");
+            const closeBtn = document.getElementById("closeModalBtn");
 
             let currentPage = 1;
             const rowsPerPage = 10;
@@ -115,12 +142,10 @@ try {
                 const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
                 paginationControls.innerHTML = "";
 
-                // Mostrar solo las filas de la página actual
                 rows.forEach(row => row.style.display = "none");
                 filteredRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
                     .forEach(row => row.style.display = "");
 
-                // Controles de paginación
                 for (let i = 1; i <= totalPages; i++) {
                     const btn = document.createElement("button");
                     btn.textContent = i;
@@ -136,13 +161,11 @@ try {
                 }
             }
 
-            // Filtro en tiempo real
             filterInput?.addEventListener("input", () => {
                 currentPage = 1;
                 renderTable();
             });
 
-            // Descargar JSON
             downloadBtn?.addEventListener("click", () => {
                 const data = rows.map(row => ({
                     uid: row.cells[0].textContent,
@@ -159,6 +182,28 @@ try {
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+            });
+
+            // 🔹 Mostrar modal con referencia
+            window.showAuraReference = (model, timestamp, uid) => {
+                const year = timestamp ? new Date(timestamp).getFullYear() : "n.d.";
+                const ref = `${model || "Unknown Model"} (${year}). ${uid}. Retrieved from https://aurablock.org/block/${uid}`;
+                referenceText.textContent = ref;
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            };
+
+            // 🔹 Copiar referencia
+            copyBtn.addEventListener("click", () => {
+                navigator.clipboard.writeText(referenceText.textContent).then(() => {
+                    alert("AURA Reference copied to clipboard!");
+                });
+            });
+
+            // 🔹 Cerrar modal
+            closeBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
             });
 
             renderTable();
