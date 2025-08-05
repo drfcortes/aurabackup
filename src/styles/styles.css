@@ -5,12 +5,12 @@
 /* === Estilos globales para texto alineado a la izquierda === */
 
 body {
-    text-align: left; /* Ya no justificado */
-    font-size: 1.125rem; /* equivalente a Tailwind text-base modificado */
-    line-height: 1.75;   /* más respiración en párrafos */
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 1.125rem;
+    line-height: 1.75;
     font-family: 'Noto Sans', sans-serif;
-    color: #2b361c;       /* aura-deep */
-    background-color: #f9f9f6; /* aura-soft */
+    @apply text-aura-deep bg-aura-soft dark:text-aura-cream dark:bg-aura-deep;
 }
 
 /* Títulos con espacio y alineación clara */
