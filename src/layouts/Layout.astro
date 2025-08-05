@@ -26,6 +26,13 @@ import "../styles/styles.css";
     <meta name="twitter:title" content="AURA Protocol" />
     <meta name="twitter:description" content="Transparent attribution for AI-generated content." />
     <meta name="twitter:image" content="/og-preview.jpg" />
+    <script>
+        // Aplicar tema guardado antes de renderizar
+        if (localStorage.getItem("theme") === "dark") {
+            document.documentElement.classList.add("dark");
+        }
+    </script>
+
 </head>
 
 <body class="font-sans text-base text-[#2b361c] bg-[#fefae3]">

@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    darkMode: 'class',
     content: [
         './src/**/*.{astro,js,jsx,ts,tsx,vue,svelte}',
         './components/**/*.{astro,js,jsx,ts,tsx}',
@@ -9,14 +10,11 @@ module.exports = {
         extend: {
             colors: {
                 aura: {
-                    // Paleta original
                     green: '#636b3f',
                     deep: '#2b361c',
                     yellow: '#fefae3',
                     sepia: '#d4a369',
                     leather: '#b17036',
-
-                    // Variantes nuevas
                     soft: '#f9f9f6',
                     beige: '#eceadf',
                     black: '#1a1a1a',
@@ -27,7 +25,7 @@ module.exports = {
                 }
             },
             fontSize: {
-                base: '1.125rem', // 18px
+                base: '1.125rem',
                 lg: '1.25rem'
             },
             fontFamily: {
@@ -36,4 +34,4 @@ module.exports = {
         }
     },
     plugins: []
-}
+};
