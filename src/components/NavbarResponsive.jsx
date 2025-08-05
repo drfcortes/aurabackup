@@ -54,7 +54,7 @@ export default function NavbarResponsive() {
                     {/* Toggle Switch */}
                     <div
                         onClick={toggleDarkMode}
-                        className="relative w-14 h-7 bg-gray-300 dark:bg-gray-700 rounded-full p-1 cursor-pointer transition-colors duration-300"
+                        className="relative w-7 h-3 bg-gray-300 dark:bg-gray-700 rounded-full p-1 cursor-pointer transition-colors duration-300"
                     >
                         <div
                             className={`bg-white dark:bg-aura-leather w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out ${

@@ -3,9 +3,26 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-    <main class="p-8 max-w-3xl mx-auto text-center text-aura-black">
-        <h1 class="text-4xl font-bold text-aura-leather mb-4">Block Not Found</h1>
-        <p class="text-lg">The AURA block you are trying to view does not exist or has expired.</p>
-        <a href="/" class="mt-6 inline-block px-4 py-2 bg-aura-green text-white rounded hover:bg-aura-deep transition">← Go back to Home</a>
+    <main class="p-8 max-w-3xl mx-auto text-center text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
+        <h1 class="text-4xl font-bold text-aura-leather dark:text-aura-yellow mb-4">
+            Block Not Found
+        </h1>
+
+        <p class="text-lg mb-6">
+            The AURA block you are trying to access could not be found in our registry.
+            This may be because the UID is incorrect, the block has expired, or it was never registered.
+        </p>
+
+        <p class="mb-8">
+            Please verify the UID and try again. If you believe this is an error, you can generate a new
+            block or contact our support team.
+        </p>
+
+        <a
+                href="/generate"
+                class="inline-block px-6 py-3 bg-aura-leather dark:bg-aura-olive text-white dark:text-aura-deep font-semibold rounded-lg shadow hover:bg-aura-green dark:hover:bg-aura-yellow transition-colors"
+        >
+            Generate New Block
+        </a>
     </main>
 </Layout>

@@ -3,12 +3,14 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-    <main class="p-8 max-w-6xl mx-auto">
-        <h1 class="text-3xl font-bold text-aura-green mb-6">AURA Color Palette Viewer</h1>
-        <p class="text-aura-deep mb-8">Visual guide to evaluate background/text contrasts and tone combinations.</p>
+    <main class="p-8 max-w-6xl mx-auto text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
+        <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow mb-6">AURA Color Palette Viewer</h1>
+        <p class="mb-8">
+            Visual guide to evaluate background/text contrasts and tone combinations.
+        </p>
 
+        <!-- Generador visual -->
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <!-- Generador visual -->
             {
                 Object.entries({
                     green: '#636b3f',
@@ -24,36 +26,37 @@ import Layout from '../layouts/Layout.astro';
                     olive: '#8b8f66',
                     cream: '#fbf9ee'
                 }).map(([name, hex]) => (
-                        <div class="rounded shadow border border-gray-300">
+                        <div class="rounded shadow border border-gray-300 dark:border-aura-olive">
                             <div class="h-24 w-full" style={`background-color: ${hex}`}></div>
                             <div class="p-4 text-sm">
                                 <strong class="block font-mono">aura-{name}</strong>
-                                <span class="text-xs text-gray-600">{hex}</span>
+                                <span class="text-xs text-aura-gray dark:text-aura-cream/80">{hex}</span>
                             </div>
                         </div>
                 ))
             }
         </div>
 
-        <h2 class="mt-12 mb-4 text-2xl text-aura-leather font-semibold">Contrast Test Blocks</h2>
+        <!-- Contrast Test Blocks -->
+        <h2 class="mt-12 mb-4 text-2xl text-aura-leather dark:text-aura-yellow font-semibold">Contrast Test Blocks</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="p-6 rounded bg-aura-soft text-aura-deep">
+            <div class="p-6 rounded bg-aura-soft dark:bg-aura-deep text-aura-deep dark:text-aura-cream">
                 <h3 class="font-bold text-lg">soft + deep</h3>
                 <p>Readable and clean for content sections.</p>
             </div>
-            <div class="p-6 rounded bg-aura-yellow text-aura-green">
+            <div class="p-6 rounded bg-aura-yellow dark:bg-aura-olive text-aura-green dark:text-aura-cream">
                 <h3 class="font-bold text-lg">yellow + green</h3>
                 <p>Good for light highlights with nature tones.</p>
             </div>
-            <div class="p-6 rounded bg-aura-cream text-aura-black">
+            <div class="p-6 rounded bg-aura-cream dark:bg-aura-black text-aura-black dark:text-aura-cream">
                 <h3 class="font-bold text-lg">cream + black</h3>
                 <p>High contrast, good for headers or landing blocks.</p>
             </div>
-            <div class="p-6 rounded bg-aura-sepia text-aura-white">
+            <div class="p-6 rounded bg-aura-sepia dark:bg-aura-leather text-aura-white dark:text-aura-cream">
                 <h3 class="font-bold text-lg">sepia + white</h3>
                 <p>Warm button or callout style.</p>
             </div>
-            <div class="p-6 rounded bg-aura-black text-aura-cream">
+            <div class="p-6 rounded bg-aura-black dark:bg-aura-deep text-aura-cream dark:text-aura-cream">
                 <h3 class="font-bold text-lg">black + cream</h3>
                 <p>Dark mode inverse contrast.</p>
             </div>
