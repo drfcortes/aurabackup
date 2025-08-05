@@ -133,9 +133,13 @@ export default function FormBlock() {
 
             toast.success("✅ Successfully submitted to the AURA Archive");
 
+            // Guardar el bloque en localStorage para acceso inmediato en la vista
+            localStorage.setItem("lastGeneratedBlock", JSON.stringify(generatedBlock));
+
             setTimeout(() => {
                 window.location.href = `/block/${res.uid}`;
             }, 1500);
+
         } catch (err) {
             console.error(err);
             toast.error("❌ Submission failed. Please try again.");

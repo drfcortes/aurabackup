@@ -16,12 +16,14 @@ export default function AuraBlockViewer({ uidFromPage }) {
                 `https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/getAuraBlockByUID/${targetUid}`
             );
             if (!res.ok) throw new Error("Block not found or server error");
+
             const data = await res.json();
-            setBlock(data);
+            const blockData = data.Item || data; // 🔹 Soporta ambos formatos de respuesta
+            setBlock(blockData);
 
             // 🔹 Generar referencia automáticamente
-            const year = data.timestamp ? new Date(data.timestamp).getFullYear() : "n.d.";
-            const ref = `${data.model || "Unknown Model"} (${year}). ${data.uid}. Retrieved from https://aurablock.org/block/${data.uid}`;
+            const year = blockData.timestamp ? new Date(blockData.timestamp).getFullYear() : "n.d.";
+            const ref = `${blockData.model || "Unknown Model"} (${year}). ${blockData.uid || "undefined"}. Retrieved from https://aurablock.org/block/${blockData.uid || ""}`;
             setAuraReference(ref);
 
         } catch (err) {
@@ -35,6 +37,21 @@ export default function AuraBlockViewer({ uidFromPage }) {
 
     useEffect(() => {
         if (uidFromPage) {
+            // Revisar si el bloque recién generado está en localStorage
+            const savedBlock = localStorage.getItem("lastGeneratedBlock");
+            if (savedBlock) {
+                const parsed = JSON.parse(savedBlock);
+                if (parsed.uid === uidFromPage) {
+                    setBlock(parsed);
+
+                    const year = parsed.timestamp ? new Date(parsed.timestamp).getFullYear() : "n.d.";
+                    const ref = `${parsed.model || "Unknown Model"} (${year}). ${parsed.uid || "undefined"}. Retrieved from https://aurablock.org/block/${parsed.uid || ""}`;
+                    setAuraReference(ref);
+
+                    localStorage.removeItem("lastGeneratedBlock"); // limpiar
+                    return; // Evitar llamada innecesaria a la API
+                }
+            }
             fetchBlock(uidFromPage);
         }
     }, [uidFromPage]);
