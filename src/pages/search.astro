@@ -53,32 +53,23 @@ import Layout from '../layouts/Layout.astro';
         </section>
     </main>
 
-    <!-- ✅ Script adaptado para UID o Email con recordatorio -->
+    <!-- ✅ Script adaptado para UID o Email -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const form = document.getElementById("blockForm");
             const input = document.getElementById("uidInput");
 
-            // Recuperar último valor si existe
-            const lastValue = localStorage.getItem("lastSearchValue");
-            if (lastValue) {
-                input.value = lastValue;
-            }
-
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                const value = input.value.trim();
+                let value = input.value.trim().toLowerCase(); // normalizar
 
                 if (!value) {
                     alert("Please enter a UID or an Email.");
                     return;
                 }
 
-                // Guardar valor actual
-                localStorage.setItem("lastSearchValue", value);
-
                 const isUID = /^AURA-\d{4}-\d{6}$/.test(value);
-                const isEmail = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value);
+                const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value); // case-insensitive
 
                 if (isUID) {
                     window.location.href = `/block/${value}`;
