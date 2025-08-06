@@ -59,13 +59,6 @@ export default function AuraBlockViewer({ uidFromPage }) {
         });
     };
 
-    const copyOutput = () => {
-        if (!block?.output_text) return;
-        navigator.clipboard.writeText(block.output_text).then(() => {
-            alert("Output copied to clipboard!");
-        });
-    };
-
     const copyRaw = () => {
         if (!block) return;
         navigator.clipboard.writeText(JSON.stringify(block, null, 2)).then(() => {
@@ -100,70 +93,63 @@ export default function AuraBlockViewer({ uidFromPage }) {
             {error && <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>}
 
             {block && (
-                <>
-                    {/* Tabla de metadatos */}
-                    <table className="min-w-full border border-aura-olive dark:border-aura-gray rounded-lg overflow-hidden">
-                        <tbody>
-                        {Object.entries({
-                            UID: block.uid,
-                            Model: block.model,
-                            Provider: block.provider,
-                            Prompt: block.prompt,
-                            "Output Text": block.output_text ? "(Click to expand below)" : null,
-                            Timestamp: block.timestamp,
-                            License: block.license,
-                            Email: block.email,
-                            Notes: block.notes,
-                            "Content Hash": block.content_hash,
-                            Language: block.language,
-                            Country: block.country,
-                            "Browser Info": block.browser_info,
-                            "Content Type": block.content_type,
-                            "Generation Context": block.generation_context
-                        }).map(([key, value], idx) => (
-                            value && (
-                                <tr key={idx} className="border-t border-aura-olive dark:border-aura-gray">
-                                    <td className="px-4 py-2 font-semibold bg-aura-beige dark:bg-aura-olive w-1/3">{key}</td>
-                                    <td className="px-4 py-2">{value}</td>
-                                </tr>
-                            )
-                        ))}
-                        </tbody>
-                    </table>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
-                    {/* Output expandible con botón de copiar */}
+                    {/* Campos principales */}
+                    {[
+                        { label: "UID", value: block.uid },
+                        { label: "Model", value: block.model },
+                        { label: "Provider", value: block.provider },
+                        { label: "Timestamp", value: block.timestamp },
+                        { label: "License", value: block.license },
+                        { label: "Email", value: block.email },
+                        { label: "Language", value: block.language },
+                        { label: "Country", value: block.country },
+                        { label: "Browser Info", value: block.browser_info },
+                        { label: "Content Type", value: block.content_type },
+                        { label: "Generation Context", value: block.generation_context },
+                        { label: "Notes", value: block.notes },
+                        { label: "Content Hash", value: block.content_hash }
+                    ].map(
+                        (field, idx) =>
+                            field.value && (
+                                <div key={idx} className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                                    <h4 className="font-semibold text-aura-green dark:text-aura-yellow">{field.label}</h4>
+                                    <p className="text-sm break-words">{field.value}</p>
+                                </div>
+                            )
+                    )}
+
+                    {/* Prompt */}
+                    {block.prompt && (
+                        <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                            <h4 className="font-semibold text-aura-green dark:text-aura-yellow">Prompt</h4>
+                            <p className="text-sm whitespace-pre-wrap">{block.prompt}</p>
+                        </div>
+                    )}
+
+                    {/* Output expandible */}
                     {block.output_text && (
-                        <details className="mt-3 rounded-lg border border-aura-olive dark:border-aura-gray">
-                            <summary className="cursor-pointer text-aura-green dark:text-aura-yellow px-4 py-2">
-                                Show Output
-                            </summary>
-                            <div className="bg-aura-beige dark:bg-aura-gray p-4 rounded-b-lg">
-                                <pre className="whitespace-pre-wrap text-sm">{block.output_text}</pre>
-                                <button
-                                    onClick={copyOutput}
-                                    className="mt-3 bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
-                                >
-                                    📋 Copy Output
-                                </button>
-                            </div>
-                        </details>
+                        <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                            <details>
+                                <summary className="cursor-pointer font-semibold text-aura-green dark:text-aura-yellow">
+                                    Show Output
+                                </summary>
+                                <p className="mt-2 text-sm whitespace-pre-wrap">{block.output_text}</p>
+                            </details>
+                        </div>
                     )}
 
                     {/* Imagen si existe */}
                     {block.image_url && (
-                        <div className="mt-3">
+                        <div className="col-span-full">
                             <img src={block.image_url} alt="AURA content" className="rounded max-w-full" />
                         </div>
                     )}
 
-                    {/* Sección de referencia AURA */}
-                    <div className="mt-6 p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
-                        <h4 className="text-lg font-semibold text-aura-green dark:text-aura-yellow mb-2">
-                            📄 AURA Reference
-                        </h4>
-                        <p className="text-sm mb-3">
-                            This is the recommended way to cite this AURA block in your documents.
-                        </p>
+                    {/* Referencia AURA */}
+                    <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                        <h4 className="text-lg font-semibold text-aura-green dark:text-aura-yellow mb-2">📄 AURA Reference</h4>
                         <pre className="bg-white dark:bg-aura-deep text-sm p-3 rounded-md overflow-x-auto border border-aura-olive dark:border-aura-gray">
                             {auraReference}
                         </pre>
@@ -175,13 +161,13 @@ export default function AuraBlockViewer({ uidFromPage }) {
                         </button>
                     </div>
 
-                    {/* AURA Raw+ expandible */}
-                    <details className="mt-6 rounded-lg border border-aura-olive dark:border-aura-gray">
-                        <summary className="cursor-pointer text-aura-green dark:text-aura-yellow px-4 py-2">
-                            Show AURA Raw+
-                        </summary>
-                        <div className="bg-white dark:bg-aura-deep p-4 rounded-b-lg border-t border-aura-olive dark:border-aura-gray">
-                            <pre className="text-sm text-aura-black dark:text-aura-cream max-h-[400px] overflow-auto">
+                    {/* AURA Raw+ */}
+                    <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                        <details>
+                            <summary className="cursor-pointer font-semibold text-aura-green dark:text-aura-yellow">
+                                Show AURA Raw+
+                            </summary>
+                            <pre className="mt-2 bg-white dark:bg-aura-deep text-sm p-3 rounded-md max-h-[400px] overflow-auto border border-aura-olive dark:border-aura-gray">
                                 {JSON.stringify(block, null, 2)}
                             </pre>
                             <button
@@ -190,9 +176,9 @@ export default function AuraBlockViewer({ uidFromPage }) {
                             >
                                 📋 Copy AURA Raw+
                             </button>
-                        </div>
-                    </details>
-                </>
+                        </details>
+                    </div>
+                </div>
             )}
         </div>
     );

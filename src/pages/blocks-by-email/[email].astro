@@ -21,7 +21,7 @@ try {
 ---
 
 <Layout>
-    <main class="p-8 max-w-6xl mx-auto text-aura-deep dark:text-aura-cream bg-aura-soft dark:bg-aura-deep rounded-2xl shadow">
+    <main class="p-8 max-w-7xl mx-auto text-aura-deep dark:text-aura-cream">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
             <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow">
                 Blocks for <span class="text-aura-leather dark:text-aura-yellow">{email}</span>
@@ -29,7 +29,7 @@ try {
             {blocks.length > 0 && (
                     <button
                             id="downloadJsonBtn"
-                            class="mt-4 sm:mt-0 bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                            class="mt-4 sm:mt-0 bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-2 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
                     >
                         Download JSON
                     </button>
@@ -44,56 +44,41 @@ try {
                                 id="filterInput"
                                 type="text"
                                 placeholder="Filter by model or provider..."
-                                class="w-full sm:w-1/2 px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-md bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
+                                class="w-full sm:w-1/2 px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-lg bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
                         />
                     </div>
 
-                    <!-- Tabla -->
-                    <div class="overflow-x-auto">
-                        <table id="blocksTable" class="min-w-full border border-aura-olive dark:border-aura-gray rounded-xl shadow-lg">
-                            <thead class="bg-aura-beige dark:bg-aura-olive">
-                            <tr class="text-aura-deep dark:text-aura-cream">
-                                <th class="px-4 py-3 text-left font-semibold">UID</th>
-                                <th class="px-4 py-3 text-left font-semibold">Model</th>
-                                <th class="px-4 py-3 text-left font-semibold">Provider</th>
-                                <th class="px-4 py-3 text-left font-semibold">Timestamp</th>
-                                <th class="px-4 py-3 text-left font-semibold">License</th>
-                                <th class="px-4 py-3 text-left font-semibold">Reference</th>
-                                <th class="px-4 py-3 text-left font-semibold">Action</th>
-                            </tr>
-                            </thead>
-                            <tbody id="blocksTableBody">
-                            {blocks.map(block => (
-                                    <tr class="border-t border-aura-olive dark:border-aura-gray hover:bg-aura-green/10 dark:hover:bg-aura-yellow/10 transition-colors">
-                                        <td class="px-4 py-3 font-mono">{block.uid}</td>
-                                        <td class="px-4 py-3">{block.model}</td>
-                                        <td class="px-4 py-3">{block.provider}</td>
-                                        <td class="px-4 py-3">{new Date(block.timestamp).toLocaleString()}</td>
-                                        <td class="px-4 py-3">{block.license}</td>
-                                        <td class="px-4 py-3">
-                                            <button
-                                                    class="bg-aura-green dark:bg-aura-leather text-white px-3 py-1 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
-                                                    onclick={`showAuraReference('${block.model}', '${block.timestamp}', '${block.uid}')`}
-                                            >
-                                                📄 View
-                                            </button>
-                                        </td>
-                                        <td class="px-4 py-3">
-                                            <a
-                                                    href={`/block/${block.uid}`}
-                                                    class="inline-block bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-1 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
-                                            >
-                                                View
-                                            </a>
-                                        </td>
-                                    </tr>
-                            ))}
-                            </tbody>
-                        </table>
-                    </div>
+                    <!-- Grid adaptativo tipo bento -->
+                    <div id="blocksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {blocks.map(block => (
+                                <div class="bg-aura-soft dark:bg-aura-deep rounded-xl shadow-lg border border-aura-olive dark:border-aura-gray p-4 flex flex-col justify-between">
+                                    <div class="mb-4">
+                                        <h2 class="text-lg font-bold text-aura-green dark:text-aura-yellow truncate">{block.model}</h2>
+                                        <p class="text-sm text-aura-gray dark:text-aura-cream">{block.provider}</p>
+                                        <p class="text-xs mt-1 text-aura-gray dark:text-aura-cream">
+                                            {new Date(block.timestamp).toLocaleString()}
+                                        </p>
+                                        <p class="text-xs mt-1 font-mono">{block.uid}</p>
+                                        <p class="text-xs mt-1">License: {block.license}</p>
+                                    </div>
 
-                    <!-- Paginación -->
-                    <div id="paginationControls" class="flex justify-center mt-6 space-x-2"></div>
+                                    <div class="flex flex-col gap-2 mt-auto">
+                                        <button
+                                                class="bg-aura-green dark:bg-aura-leather text-white px-3 py-1 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
+                                                onclick={`showAuraReference('${block.model}', '${block.timestamp}', '${block.uid}')`}
+                                        >
+                                            📄 Reference
+                                        </button>
+                                        <a
+                                                href={`/block/${block.uid}`}
+                                                class="text-center bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-3 py-1 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
+                                        >
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                        ))}
+                    </div>
 
                     <!-- Modal Reference -->
                     <div id="referenceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
@@ -102,8 +87,8 @@ try {
                             <p class="text-sm mb-3">This is the recommended way to cite this AURA block in your documents.</p>
                             <pre id="referenceText" class="bg-aura-beige dark:bg-aura-gray p-3 rounded-md text-sm whitespace-pre-wrap"></pre>
                             <div class="flex justify-end gap-2 mt-4">
-                                <button id="copyReferenceBtn" class="bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded hover:bg-aura-deep dark:hover:bg-aura-yellow transition">📋 Copy</button>
-                                <button id="closeModalBtn" class="bg-gray-400 dark:bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-500 dark:hover:bg-gray-700 transition">Close</button>
+                                <button id="copyReferenceBtn" class="bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition">📋 Copy</button>
+                                <button id="closeModalBtn" class="bg-gray-400 dark:bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 dark:hover:bg-gray-700 transition">Close</button>
                             </div>
                         </div>
                     </div>
@@ -115,12 +100,11 @@ try {
         )}
     </main>
 
-    <!-- Script para filtro, paginación, descarga y referencia -->
+    <!-- Script para filtro, descarga y referencia -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const rows = Array.from(document.querySelectorAll("#blocksTableBody tr"));
+            const cards = Array.from(document.querySelectorAll("#blocksGrid > div"));
             const filterInput = document.getElementById("filterInput");
-            const paginationControls = document.getElementById("paginationControls");
             const downloadBtn = document.getElementById("downloadJsonBtn");
 
             const modal = document.getElementById("referenceModal");
@@ -128,52 +112,22 @@ try {
             const copyBtn = document.getElementById("copyReferenceBtn");
             const closeBtn = document.getElementById("closeModalBtn");
 
-            let currentPage = 1;
-            const rowsPerPage = 10;
-
-            function renderTable() {
+            filterInput?.addEventListener("input", () => {
                 const filterValue = filterInput.value.toLowerCase();
-                const filteredRows = rows.filter(row => {
-                    const model = row.cells[1].textContent.toLowerCase();
-                    const provider = row.cells[2].textContent.toLowerCase();
-                    return model.includes(filterValue) || provider.includes(filterValue);
+                cards.forEach(card => {
+                    const text = card.textContent.toLowerCase();
+                    card.style.display = text.includes(filterValue) ? "" : "none";
+                    });
                 });
 
-                const totalPages = Math.ceil(filteredRows.length / rowsPerPage);
-                paginationControls.innerHTML = "";
-
-                rows.forEach(row => row.style.display = "none");
-                filteredRows.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
-                    .forEach(row => row.style.display = "");
-
-                for (let i = 1; i <= totalPages; i++) {
-                    const btn = document.createElement("button");
-                    btn.textContent = i;
-                    btn.className = "px-3 py-1 rounded border border-aura-olive dark:border-aura-gray hover:bg-aura-green/20 dark:hover:bg-aura-yellow/20";
-                    if (i === currentPage) {
-                        btn.classList.add("bg-aura-green", "dark:bg-aura-yellow", "text-white", "dark:text-aura-deep");
-                    }
-                    btn.addEventListener("click", () => {
-                        currentPage = i;
-                        renderTable();
-                    });
-                    paginationControls.appendChild(btn);
-                }
-            }
-
-            filterInput?.addEventListener("input", () => {
-                currentPage = 1;
-                renderTable();
-            });
-
             downloadBtn?.addEventListener("click", () => {
-                const data = rows.map(row => ({
-                    uid: row.cells[0].textContent,
-                    model: row.cells[1].textContent,
-                    provider: row.cells[2].textContent,
-                    timestamp: row.cells[3].textContent,
-                    license: row.cells[4].textContent
-                }));
+                const data = cards.map(card => ({
+                    uid: card.querySelector("p.font-mono").textContent,
+                    model: card.querySelector("h2").textContent,
+                    provider: card.querySelector("p.text-sm").textContent,
+                    timestamp: card.querySelectorAll("p.text-xs")[0].textContent,
+                    license: card.querySelectorAll("p.text-xs")[2].textContent.replace("License: ", "")
+                    }));
                 const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement("a");
@@ -182,31 +136,26 @@ try {
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
-            });
+                });
 
-            // 🔹 Mostrar modal con referencia
             window.showAuraReference = (model, timestamp, uid) => {
                 const year = timestamp ? new Date(timestamp).getFullYear() : "n.d.";
                 const ref = `${model || "Unknown Model"} (${year}). ${uid}. Retrieved from https://aurablock.org/block/${uid}`;
                 referenceText.textContent = ref;
                 modal.classList.remove("hidden");
                 modal.classList.add("flex");
-            };
+                };
 
-            // 🔹 Copiar referencia
             copyBtn.addEventListener("click", () => {
                 navigator.clipboard.writeText(referenceText.textContent).then(() => {
                     alert("AURA Reference copied to clipboard!");
+                    });
                 });
-            });
 
-            // 🔹 Cerrar modal
             closeBtn.addEventListener("click", () => {
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
+                });
             });
-
-            renderTable();
-        });
     </script>
 </Layout>
