@@ -61,15 +61,16 @@ import Layout from '../layouts/Layout.astro';
 
             form.addEventListener("submit", (e) => {
                 e.preventDefault();
-                let value = input.value.trim().toLowerCase(); // normalizar
+                let value = input.value.trim(); // ❌ NO lo pasamos a lower, mantenemos mayúsculas
 
                 if (!value) {
                     alert("Please enter a UID or an Email.");
                     return;
                 }
 
-                const isUID = /^AURA-\d{4}-\d{6}$/.test(value);
-                const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value); // case-insensitive
+                // ✅ Regex más flexible: acepta 4 dígitos de año y de 1 a 10 dígitos en el final
+                const isUID = /^AURA-\d{4}-\d{1,10}$/.test(value);
+                const isEmail = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value);
 
                 if (isUID) {
                     window.location.href = `/block/${value}`;
@@ -81,4 +82,5 @@ import Layout from '../layouts/Layout.astro';
             });
         });
     </script>
+
 </Layout>

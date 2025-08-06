@@ -1,11 +1,27 @@
 import toast from 'react-hot-toast';
-import React, { useState } from "react";
-import generateUID from "../utils/generateUID";
+import React, { useState, useEffect } from "react";
 import generateTimestamp from "../utils/generateTimestamp";
 import computeContentHash from "../utils/computeContentHash";
 import submitAuraBlock from "../utils/submitAuraBlock";
 
 const AURA_VERSION = "0.1";
+const UID_API_URL = "https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/generateNextUID";
+
+// Lista ISO 639-1
+const LANGUAGES = [
+    { code: "en", name: "English" },
+    { code: "es", name: "Spanish" },
+    { code: "fr", name: "French" },
+    { code: "de", name: "German" },
+    { code: "it", name: "Italian" },
+    { code: "pt", name: "Portuguese" },
+    { code: "ru", name: "Russian" },
+    { code: "zh", name: "Chinese" },
+    { code: "ja", name: "Japanese" },
+    { code: "ar", name: "Arabic" },
+    { code: "hi", name: "Hindi" },
+    { code: "ko", name: "Korean" }
+];
 
 const MODELS = [
     { name: "GPT-4o", provider: "OpenAI" },
@@ -30,22 +46,22 @@ const MODELS = [
     { name: "Other", provider: "" }
 ];
 
-// Extra metadata
+// Agrega metadata automática editable
 async function enrichBlockData(block) {
-    block.language = navigator.language || null;
-    block.browser_info = navigator.userAgent || null;
+    block.language = navigator.language || "";
+    block.browser_info = navigator.userAgent || "";
     try {
         const res = await fetch("https://ipapi.co/json/");
         if (res.ok) {
             const data = await res.json();
-            block.country = data.country_code || null;
+            block.country = data.country_code || "";
         }
     } catch {
         console.warn("Could not fetch country");
     }
-    block.content_type = "text";
-    block.generation_context = "general";
-    block.image_url = null;
+    if (!block.content_type) block.content_type = "text";
+    if (!block.generation_context) block.generation_context = "general";
+    if (!block.image_url) block.image_url = "";
     return block;
 }
 
@@ -54,19 +70,37 @@ export default function FormBlock() {
         model: "",
         provider: "",
         prompt: "",
+        prompt_language: (navigator.language || "en").split("-")[0],
         output_text: "",
         user_edit: false,
         notes: "",
         license: "CC-BY-4.0",
-        email: ""
+        email: "",
+        content_type: "text",
+        generation_context: "general",
+        image_url: ""
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [uid] = useState(generateUID());
+    const [uid, setUid] = useState("Loading...");
     const [timestamp] = useState(generateTimestamp());
     const [generatedBlock, setGeneratedBlock] = useState(null);
     const [contentHash, setContentHash] = useState("");
     const [customModel, setCustomModel] = useState("");
+
+    // Obtener UID al iniciar
+    useEffect(() => {
+        fetch(UID_API_URL)
+            .then(res => res.json())
+            .then(data => {
+                if (data.next_uid) {
+                    setUid(data.next_uid);
+                } else {
+                    setUid("Error generating UID");
+                }
+            })
+            .catch(() => setUid("Error generating UID"));
+    }, []);
 
     const handleModelChange = (e) => {
         const model = e.target.value;
@@ -90,12 +124,16 @@ export default function FormBlock() {
             model: formData.model === "Other" ? customModel : formData.model,
             provider: formData.provider,
             prompt: formData.prompt,
+            prompt_language: formData.prompt_language,
             output_text: formData.output_text || null,
             timestamp,
             user_edit: formData.user_edit,
             notes: formData.notes,
             license: formData.license,
             email: formData.email,
+            content_type: formData.content_type,
+            generation_context: formData.generation_context,
+            image_url: formData.image_url,
             uid
         };
 
@@ -105,7 +143,6 @@ export default function FormBlock() {
 
         setGeneratedBlock(block);
         setContentHash(hash);
-        window.dispatchEvent(new CustomEvent("auraBlockGenerated", { detail: block }));
     };
 
     const handleSubmit = async () => {
@@ -117,7 +154,7 @@ export default function FormBlock() {
         try {
             const res = await submitAuraBlock(generatedBlock);
             toast.success("✅ Successfully submitted to the AURA Archive");
-            localStorage.setItem("lastGeneratedBlock", JSON.stringify(generatedBlock));
+            localStorage.setItem("lastGeneratedBlock", JSON.stringify({ ...generatedBlock, uid: res.uid }));
             setTimeout(() => {
                 window.location.href = `/block/${res.uid}`;
             }, 1500);
@@ -134,8 +171,7 @@ export default function FormBlock() {
 
             {/* Model */}
             <div>
-                <label className="block font-medium mb-1">AI Model Used <span className="text-red-500">*</span></label>
-                <p className="text-sm mb-2">Select the AI model you used to generate this content.</p>
+                <label className="block font-medium mb-1">AI Model Used *</label>
                 <select
                     className="w-full border rounded-lg p-2 bg-white dark:bg-aura-deep"
                     value={formData.model}
@@ -157,22 +193,9 @@ export default function FormBlock() {
                 )}
             </div>
 
-            {/* Provider */}
-            {formData.provider && (
-                <div>
-                    <label className="block font-medium mb-1">Provider</label>
-                    <input
-                        className="w-full border rounded-lg p-2 bg-gray-100 dark:bg-aura-gray"
-                        value={formData.provider}
-                        disabled
-                    />
-                </div>
-            )}
-
             {/* Prompt */}
             <div>
-                <label className="block font-medium mb-1">Prompt <span className="text-red-500">*</span></label>
-                <p className="text-sm mb-2">Write the exact prompt used to generate the output.</p>
+                <label className="block font-medium mb-1">Prompt *</label>
                 <textarea
                     className="w-full border rounded-lg p-2"
                     name="prompt"
@@ -181,49 +204,64 @@ export default function FormBlock() {
                 />
             </div>
 
-            {/* Output */}
+            {/* Prompt Language */}
             <div>
-                <label className="block font-medium mb-1">Output Text</label>
-                <p className="text-sm mb-2">Describe or paste the generated output from the AI model.</p>
-                <textarea
+                <label className="block font-medium mb-1">Prompt Language</label>
+                <select
+                    name="prompt_language"
                     className="w-full border rounded-lg p-2"
-                    name="output_text"
-                    value={formData.output_text}
+                    value={formData.prompt_language}
                     onChange={handleChange}
-                />
+                >
+                    {LANGUAGES.map((lang, idx) => (
+                        <option key={idx} value={lang.code}>
+                            {lang.name} ({lang.code})
+                        </option>
+                    ))}
+                </select>
             </div>
 
-            {/* User edit */}
-            <div className="flex items-center space-x-2">
+            {/* Extra Metadata Editable */}
+            <div>
+                <label className="block font-medium mb-1">Content Type</label>
                 <input
-                    type="checkbox"
-                    name="user_edit"
-                    checked={formData.user_edit}
+                    type="text"
+                    name="content_type"
+                    className="w-full border rounded-lg p-2"
+                    value={formData.content_type}
                     onChange={handleChange}
                 />
-                <label>This content was manually edited after generation</label>
             </div>
 
-            {/* Notes */}
             <div>
-                <label className="block font-medium mb-1">Notes (optional)</label>
-                <p className="text-sm mb-2">Any additional observations or context.</p>
-                <textarea
+                <label className="block font-medium mb-1">Generation Context</label>
+                <input
+                    type="text"
+                    name="generation_context"
                     className="w-full border rounded-lg p-2"
-                    name="notes"
-                    value={formData.notes}
+                    value={formData.generation_context}
+                    onChange={handleChange}
+                />
+            </div>
+
+            <div>
+                <label className="block font-medium mb-1">Image URL</label>
+                <input
+                    type="url"
+                    name="image_url"
+                    className="w-full border rounded-lg p-2"
+                    value={formData.image_url}
                     onChange={handleChange}
                 />
             </div>
 
             {/* Email */}
             <div>
-                <label className="block font-medium mb-1">Email (optional)</label>
-                <p className="text-sm mb-2 text-aura-gray">Recommended if you want to track all your generated blocks in the future.</p>
+                <label className="block font-medium mb-1">Email</label>
                 <input
-                    className="w-full border rounded-lg p-2"
                     type="email"
                     name="email"
+                    className="w-full border rounded-lg p-2"
                     value={formData.email}
                     onChange={handleChange}
                 />
@@ -250,23 +288,50 @@ export default function FormBlock() {
             </div>
 
             {/* Buttons */}
-            <div className="flex gap-4 pt-4">
-                <button
-                    onClick={generateBlock}
-                    className="bg-aura-leather hover:bg-aura-green text-white px-6 py-2 rounded-full shadow"
-                >
+            <div className="flex gap-4 pt-4 flex-wrap">
+                <button onClick={generateBlock} className="bg-aura-leather hover:bg-aura-green text-white px-6 py-2 rounded-full shadow">
                     🔄 Generate Block
                 </button>
                 <button
                     onClick={handleSubmit}
                     disabled={isSubmitting}
-                    className={`bg-aura-green hover:bg-aura-deep text-white px-6 py-2 rounded-full shadow ${isSubmitting ? 'opacity-50' : ''}`}
+                    className={`bg-aura-green hover:bg-aura-deep text-white px-6 py-2 rounded-full shadow flex items-center gap-2 ${
+                        isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
                 >
-                    🚀 Submit to AURA Registry
+                    {isSubmitting ? (
+                        <>
+                            <svg
+                                className="animate-spin h-5 w-5 text-white"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                            >
+                                <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                ></circle>
+                                <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                ></path>
+                            </svg>
+                            Sending...
+                        </>
+                    ) : (
+                        <>
+                            🚀 Submit to AURA Registry
+                        </>
+                    )}
                 </button>
+
             </div>
 
-            {/* Preview */}
             {generatedBlock && (
                 <div className="mt-6">
                     <h2 className="text-lg font-semibold">Preview</h2>

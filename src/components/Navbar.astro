@@ -1,0 +1,45 @@
+---
+import LightLogo from "../assets/Lightlogo.webp";
+import DarkLogo from "../assets/Darklogo.webp";
+import NavbarResponsive from "./NavbarResponsive.jsx";
+---
+
+<nav class="bg-aura-soft dark:bg-aura-deep shadow-md">
+    <div class="max-w-6xl mx-auto px-4 flex justify-between items-center h-16">
+        <!-- Logo optimizado con prioridad -->
+        <a href="/" class="flex items-center space-x-2">
+            <img
+                    src={LightLogo.src}
+                    alt="AURA Logo"
+                    width="32"
+                    height="32"
+                    class="w-8 h-8 light-logo"
+                    loading="eager"
+                    decoding="async"
+            />
+            <img
+                    src={DarkLogo.src}
+                    alt="AURA Logo"
+                    width="32"
+                    height="32"
+                    class="w-8 h-8 dark-logo hidden"
+                    loading="eager"
+                    decoding="async"
+            />
+            <span class="font-bold text-aura-deep dark:text-aura-cream">AURA</span>
+        </a>
+
+        <!-- Navbar interactivo -->
+        <NavbarResponsive client:load />
+    </div>
+</nav>
+
+<style>
+    /* Mostrar solo el logo correcto según el modo */
+    :global(html:not(.dark)) .dark-logo {
+        display: none;
+    }
+    :global(html.dark) .light-logo {
+        display: none;
+    }
+</style>

@@ -1,10 +1,8 @@
 ---
+// 📄 blocks-by-email/[email].astro
 import Layout from '../../layouts/Layout.astro';
 
-// Obtener y decodificar el email de la URL
 const email = decodeURIComponent(Astro.params.email);
-
-// Llamar a la API de búsqueda
 const apiUrl = `https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/searchAuraBlocks?email=${encodeURIComponent(email)}`;
 
 let blocks = [];
@@ -13,84 +11,78 @@ try {
     if (res.ok) {
         blocks = await res.json();
     } else {
-        console.error("Error fetching data:", res.status);
+        console.error("❌ Error fetching blocks:", res.status);
     }
 } catch (err) {
-    console.error("Fetch error:", err);
+    console.error("❌ Fetch error:", err);
 }
 ---
 
 <Layout>
-    <main class="p-8 max-w-7xl mx-auto text-aura-deep dark:text-aura-cream">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6">
-            <h1 class="text-3xl font-bold text-aura-green dark:text-aura-yellow">
+    <main class="p-6 max-w-7xl mx-auto text-aura-deep dark:text-aura-cream">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-3">
+            <h1 class="text-2xl font-bold text-aura-green dark:text-aura-yellow">
                 Blocks for <span class="text-aura-leather dark:text-aura-yellow">{email}</span>
             </h1>
-            {blocks.length > 0 && (
-                    <button
-                            id="downloadJsonBtn"
-                            class="mt-4 sm:mt-0 bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-4 py-2 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
-                    >
-                        Download JSON
-                    </button>
-            )}
+            <div class="flex gap-3">
+                <button
+                        id="downloadSelectedBtn"
+                        class="bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition"
+                >
+                    Download Selected (.aura)
+                </button>
+            </div>
         </div>
 
         {blocks.length > 0 ? (
                 <>
                     <!-- Filtro -->
-                    <div class="mb-4">
-                        <input
-                                id="filterInput"
-                                type="text"
-                                placeholder="Filter by model or provider..."
-                                class="w-full sm:w-1/2 px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-lg bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
-                        />
-                    </div>
+                    <input
+                            id="filterInput"
+                            type="text"
+                            placeholder="Filter by model or provider..."
+                            class="w-full sm:w-1/2 mb-4 px-4 py-2 border border-aura-olive dark:border-aura-gray rounded-lg bg-white dark:bg-aura-deep text-aura-black dark:text-aura-cream focus:outline-none"
+                    />
 
-                    <!-- Grid adaptativo tipo bento -->
-                    <div id="blocksGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {blocks.map(block => (
-                                <div class="bg-aura-soft dark:bg-aura-deep rounded-xl shadow-lg border border-aura-olive dark:border-aura-gray p-4 flex flex-col justify-between">
-                                    <div class="mb-4">
-                                        <h2 class="text-lg font-bold text-aura-green dark:text-aura-yellow truncate">{block.model}</h2>
-                                        <p class="text-sm text-aura-gray dark:text-aura-cream">{block.provider}</p>
-                                        <p class="text-xs mt-1 text-aura-gray dark:text-aura-cream">
-                                            {new Date(block.timestamp).toLocaleString()}
-                                        </p>
-                                        <p class="text-xs mt-1 font-mono">{block.uid}</p>
-                                        <p class="text-xs mt-1">License: {block.license}</p>
-                                    </div>
-
-                                    <div class="flex flex-col gap-2 mt-auto">
-                                        <button
-                                                class="bg-aura-green dark:bg-aura-leather text-white px-3 py-1 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
-                                                onclick={`showAuraReference('${block.model}', '${block.timestamp}', '${block.uid}')`}
-                                        >
-                                            📄 Reference
-                                        </button>
-                                        <a
-                                                href={`/block/${block.uid}`}
-                                                class="text-center bg-aura-green dark:bg-aura-leather text-white dark:text-aura-cream px-3 py-1 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition text-sm"
-                                        >
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                        ))}
-                    </div>
-
-                    <!-- Modal Reference -->
-                    <div id="referenceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-                        <div class="bg-white dark:bg-aura-deep rounded-lg shadow-lg max-w-lg w-full p-6 text-aura-deep dark:text-aura-cream">
-                            <h2 class="text-xl font-bold mb-4 text-aura-green dark:text-aura-yellow">📄 AURA Reference</h2>
-                            <p class="text-sm mb-3">This is the recommended way to cite this AURA block in your documents.</p>
-                            <pre id="referenceText" class="bg-aura-beige dark:bg-aura-gray p-3 rounded-md text-sm whitespace-pre-wrap"></pre>
-                            <div class="flex justify-end gap-2 mt-4">
-                                <button id="copyReferenceBtn" class="bg-aura-green dark:bg-aura-leather text-white px-4 py-2 rounded-lg hover:bg-aura-deep dark:hover:bg-aura-yellow transition">📋 Copy</button>
-                                <button id="closeModalBtn" class="bg-gray-400 dark:bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-500 dark:hover:bg-gray-700 transition">Close</button>
-                            </div>
-                        </div>
+                    <!-- Tabla -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse border border-aura-olive dark:border-aura-gray text-sm">
+                            <thead class="bg-aura-beige dark:bg-aura-olive">
+                            <tr>
+                                <th class="p-2 border">Select</th>
+                                <th class="p-2 border">UID</th>
+                                <th class="p-2 border">Model</th>
+                                <th class="p-2 border">Provider</th>
+                                <th class="p-2 border">Timestamp</th>
+                                <th class="p-2 border">License</th>
+                                <th class="p-2 border">Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                            {blocks.map(block => (
+                                    <tr class="hover:bg-aura-soft dark:hover:bg-aura-deep transition">
+                                        <td class="p-2 border text-center">
+                                            <input type="checkbox" class="select-block" data-uid={block.uid} />
+                                        </td>
+                                        <td class="p-2 border font-mono text-aura-green hover:underline cursor-pointer">
+                                            <a href={`/block/${block.uid}`} target="_blank">{block.uid}</a>
+                                        </td>
+                                        <td class="p-2 border">{block.model}</td>
+                                        <td class="p-2 border">{block.provider}</td>
+                                        <td class="p-2 border">{new Date(block.timestamp).toLocaleString()}</td>
+                                        <td class="p-2 border">{block.license}</td>
+                                        <td class="p-2 border text-center">
+                                            <button
+                                                    class="bg-aura-green text-white px-3 py-1 rounded hover:bg-aura-deep text-xs"
+                                                    onclick={`showReference('${block.model}','${block.timestamp}','${block.uid}')`}
+                                            >
+                                                Reference
+                                            </button>
+                                        </td>
+                                    </tr>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
                 </>
         ) : (
@@ -100,62 +92,167 @@ try {
         )}
     </main>
 
-    <!-- Script para filtro, descarga y referencia -->
+    <!-- Modal Reference -->
+    <div id="referenceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white dark:bg-aura-deep rounded-lg shadow-lg max-w-lg w-full p-6 text-aura-deep dark:text-aura-cream">
+            <h2 class="text-lg font-bold mb-4 text-aura-green dark:text-aura-yellow">📄 AURA Reference</h2>
+            <pre id="referenceText" class="bg-aura-beige dark:bg-aura-gray p-3 rounded-md text-sm whitespace-pre-wrap"></pre>
+            <div class="flex justify-end gap-2 mt-4">
+                <button id="copyReferenceBtn" class="bg-aura-green text-white px-4 py-2 rounded-lg hover:bg-aura-deep transition">📋 Copy</button>
+                <button id="closeModalBtn" class="bg-gray-400 text-white px-4 py-2 rounded-lg hover:bg-gray-500 transition">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const cards = Array.from(document.querySelectorAll("#blocksGrid > div"));
             const filterInput = document.getElementById("filterInput");
-            const downloadBtn = document.getElementById("downloadJsonBtn");
-
+            const tableBody = document.getElementById("tableBody");
             const modal = document.getElementById("referenceModal");
             const referenceText = document.getElementById("referenceText");
             const copyBtn = document.getElementById("copyReferenceBtn");
             const closeBtn = document.getElementById("closeModalBtn");
+            const downloadBtn = document.getElementById("downloadSelectedBtn");
 
-            filterInput?.addEventListener("input", () => {
-                const filterValue = filterInput.value.toLowerCase();
-                cards.forEach(card => {
-                    const text = card.textContent.toLowerCase();
-                    card.style.display = text.includes(filterValue) ? "" : "none";
+            // 📌 Ordenar columnas con indicador visual y orden inicial
+            document.querySelectorAll("th").forEach((header, index) => {
+                if (index === 1 || index === 6) return; // No ordenar Select ni Actions
+
+                header.style.cursor = "pointer";
+                let ascending = true;
+
+                const sortTable = () => {
+                    const rows = Array.from(tableBody.querySelectorAll("tr"));
+
+                    // Quitar flechas de otros headers
+                    document.querySelectorAll("th").forEach(th => {
+                        if (th !== header) th.textContent = th.textContent.replace(/[\u25B2\u25BC]/g, "").trim();
                     });
-                });
 
-            downloadBtn?.addEventListener("click", () => {
-                const data = cards.map(card => ({
-                    uid: card.querySelector("p.font-mono").textContent,
-                    model: card.querySelector("h2").textContent,
-                    provider: card.querySelector("p.text-sm").textContent,
-                    timestamp: card.querySelectorAll("p.text-xs")[0].textContent,
-                    license: card.querySelectorAll("p.text-xs")[2].textContent.replace("License: ", "")
-                    }));
-                const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = `aura_blocks_${Date.now()}.json`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                });
+                    // Añadir flecha al header actual
+                    const arrow = ascending ? " ▲" : " ▼";
+                    header.textContent = header.textContent.replace(/[\u25B2\u25BC]/g, "").trim() + arrow;
 
-            window.showAuraReference = (model, timestamp, uid) => {
-                const year = timestamp ? new Date(timestamp).getFullYear() : "n.d.";
-                const ref = `${model || "Unknown Model"} (${year}). ${uid}. Retrieved from https://aurablock.org/block/${uid}`;
-                referenceText.textContent = ref;
-                modal.classList.remove("hidden");
-                modal.classList.add("flex");
+                    // Resaltar columna activa
+                    document.querySelectorAll("th").forEach(th => th.classList.remove("bg-aura-soft", "dark:bg-aura-deep"));
+                    header.classList.add("bg-aura-soft", "dark:bg-aura-deep");
+
+                    rows.sort((a, b) => {
+                        const cellA = a.children[index].textContent.trim();
+                        const cellB = b.children[index].textContent.trim();
+
+                        // Fecha
+                        if (index === 4) {
+                            return ascending
+                                ? new Date(cellA) - new Date(cellB)
+                                : new Date(cellB) - new Date(cellA);
+                        }
+
+                        // UID numérico
+                        if (index === 0) {
+                            const numA = parseInt(cellA.split("-")[2], 10);
+                            const numB = parseInt(cellB.split("-")[2], 10);
+                            return ascending ? numA - numB : numB - numA;
+                        }
+
+                        // Texto
+                        return ascending
+                            ? cellA.localeCompare(cellB)
+                            : cellB.localeCompare(cellA);
+                    });
+
+                    tableBody.innerHTML = "";
+                    rows.forEach(row => tableBody.appendChild(row));
+
+                    ascending = !ascending;
                 };
 
+                // Evento de clic
+                header.addEventListener("click", sortTable);
+
+                // 📌 Orden inicial por Timestamp ↓
+                if (index === 4) {
+                    ascending = false; // Descendente
+                    sortTable();
+                }
+            });
+
+            // Filtro
+            filterInput?.addEventListener("input", () => {
+                const filterValue = filterInput.value.toLowerCase();
+                Array.from(tableBody.children).forEach(row => {
+                    row.style.display = row.textContent.toLowerCase().includes(filterValue) ? "" : "none";
+                });
+            });
+
+            // Mostrar referencia
+            window.showReference = (model, timestamp, uid) => {
+                const year = timestamp ? new Date(timestamp).getFullYear() : "n.d.";
+                referenceText.textContent = `${model} (${year}). ${uid}. Retrieved from https://aurablock.org/block/${uid}`;
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            };
+
+            // Copiar referencia
             copyBtn.addEventListener("click", () => {
                 navigator.clipboard.writeText(referenceText.textContent).then(() => {
                     alert("AURA Reference copied to clipboard!");
-                    });
                 });
+            });
 
+            // Cerrar modal
             closeBtn.addEventListener("click", () => {
                 modal.classList.add("hidden");
                 modal.classList.remove("flex");
-                });
             });
+
+            // Descargar seleccionados
+            downloadBtn.addEventListener("click", async () => {
+                const selectedUIDs = Array.from(document.querySelectorAll(".select-block:checked"))
+                    .map(cb => cb.dataset.uid);
+
+                if (!selectedUIDs.length) {
+                    alert("Please select at least one block.");
+                    return;
+                }
+
+                try {
+                    const fetchedBlocks = [];
+
+                    for (const uid of selectedUIDs) {
+                        const res = await fetch(`https://qyx30mhh90.execute-api.us-east-2.amazonaws.com/v1/getAuraBlockByUID/${uid}`);
+                        if (res.ok) {
+                            const blockData = await res.json();
+                            fetchedBlocks.push(blockData);
+                        } else {
+                            console.error(`❌ Failed to fetch block ${uid}:`, res.status);
+                        }
+                    }
+
+                    if (!fetchedBlocks.length) {
+                        alert("No blocks could be downloaded.");
+                        return;
+                    }
+
+                    // Crear archivo .aura
+                    const blob = new Blob([JSON.stringify(fetchedBlocks, null, 2)], { type: "application/json" });
+                    const url = URL.createObjectURL(blob);
+
+                    const link = document.createElement("a");
+                    link.href = url;
+                    link.download = `aura_blocks_${Date.now()}.aura`;
+                    document.body.appendChild(link);
+                    link.click();
+
+                    URL.revokeObjectURL(url);
+                    link.remove();
+                } catch (err) {
+                    console.error("❌ Download error:", err);
+                    alert("Error downloading blocks.");
+                }
+            });
+        });
     </script>
+
 </Layout>

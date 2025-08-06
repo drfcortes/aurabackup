@@ -72,7 +72,7 @@ export default function AuraBlockViewer({ uidFromPage }) {
                 AURA Block Viewer
             </h2>
 
-            {/* Input para buscar por UID */}
+            {/* Input de búsqueda */}
             <div className="flex flex-col sm:flex-row gap-3">
                 <input
                     type="text"
@@ -93,44 +93,58 @@ export default function AuraBlockViewer({ uidFromPage }) {
             {error && <p className="text-red-600 dark:text-red-400 font-medium">{error}</p>}
 
             {block && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4">
 
-                    {/* Campos principales */}
-                    {[
-                        { label: "UID", value: block.uid },
-                        { label: "Model", value: block.model },
-                        { label: "Provider", value: block.provider },
-                        { label: "Timestamp", value: block.timestamp },
-                        { label: "License", value: block.license },
-                        { label: "Email", value: block.email },
-                        { label: "Language", value: block.language },
-                        { label: "Country", value: block.country },
-                        { label: "Browser Info", value: block.browser_info },
-                        { label: "Content Type", value: block.content_type },
-                        { label: "Generation Context", value: block.generation_context },
-                        { label: "Notes", value: block.notes },
-                        { label: "Content Hash", value: block.content_hash }
-                    ].map(
-                        (field, idx) =>
-                            field.value && (
-                                <div key={idx} className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
-                                    <h4 className="font-semibold text-aura-green dark:text-aura-yellow">{field.label}</h4>
-                                    <p className="text-sm break-words">{field.value}</p>
-                                </div>
-                            )
-                    )}
+                    {/* 🟢 Campos principales */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[
+                            { label: "UID", value: block.uid },
+                            { label: "Model", value: block.model },
+                            { label: "Provider", value: block.provider },
+                            { label: "Timestamp", value: block.timestamp },
+                            { label: "License", value: block.license },
+                            { label: "Email", value: block.email }
+                        ].map(
+                            (field, idx) =>
+                                field.value && (
+                                    <div key={idx} className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                                        <h4 className="font-semibold text-aura-green dark:text-aura-yellow">{field.label}</h4>
+                                        <p className="text-sm break-words">{field.value}</p>
+                                    </div>
+                                )
+                        )}
+                    </div>
 
-                    {/* Prompt */}
+                    {/* 🟡 Metadatos secundarios */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {[
+                            { label: "Language", value: block.language },
+                            { label: "Country", value: block.country },
+                            { label: "Browser Info", value: block.browser_info },
+                            { label: "Content Type", value: block.content_type },
+                            { label: "Generation Context", value: block.generation_context }
+                        ].map(
+                            (field, idx) =>
+                                field.value && (
+                                    <div key={idx} className="p-3 bg-aura-beige dark:bg-aura-olive rounded border border-aura-olive dark:border-aura-gray text-xs">
+                                        <h4 className="font-semibold">{field.label}</h4>
+                                        <p className="break-words">{field.value}</p>
+                                    </div>
+                                )
+                        )}
+                    </div>
+
+                    {/* 🔵 Prompt */}
                     {block.prompt && (
-                        <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                        <div className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
                             <h4 className="font-semibold text-aura-green dark:text-aura-yellow">Prompt</h4>
                             <p className="text-sm whitespace-pre-wrap">{block.prompt}</p>
                         </div>
                     )}
 
-                    {/* Output expandible */}
+                    {/* 🔵 Output expandible */}
                     {block.output_text && (
-                        <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                        <div className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
                             <details>
                                 <summary className="cursor-pointer font-semibold text-aura-green dark:text-aura-yellow">
                                     Show Output
@@ -140,15 +154,15 @@ export default function AuraBlockViewer({ uidFromPage }) {
                         </div>
                     )}
 
-                    {/* Imagen si existe */}
+                    {/* 🖼 Imagen */}
                     {block.image_url && (
-                        <div className="col-span-full">
+                        <div>
                             <img src={block.image_url} alt="AURA content" className="rounded max-w-full" />
                         </div>
                     )}
 
-                    {/* Referencia AURA */}
-                    <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                    {/* 📄 Referencia AURA */}
+                    <div className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
                         <h4 className="text-lg font-semibold text-aura-green dark:text-aura-yellow mb-2">📄 AURA Reference</h4>
                         <pre className="bg-white dark:bg-aura-deep text-sm p-3 rounded-md overflow-x-auto border border-aura-olive dark:border-aura-gray">
                             {auraReference}
@@ -161,8 +175,8 @@ export default function AuraBlockViewer({ uidFromPage }) {
                         </button>
                     </div>
 
-                    {/* AURA Raw+ */}
-                    <div className="col-span-full p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
+                    {/* 🗄 AURA Raw+ */}
+                    <div className="p-4 bg-aura-beige dark:bg-aura-olive rounded-lg border border-aura-olive dark:border-aura-gray">
                         <details>
                             <summary className="cursor-pointer font-semibold text-aura-green dark:text-aura-yellow">
                                 Show AURA Raw+

@@ -1,0 +1,22 @@
+---
+---
+import { Image } from "astro:assets";
+import LightLogo from "../assets/Lightlogo.webp";
+import DarkLogo from "../assets/Darklogo.webp";
+
+const { mode } = Astro.props;
+---
+
+<a href="/" class="flex items-center space-x-2">
+    <Image
+            src={mode === "dark" ? DarkLogo : LightLogo}
+            alt="AURA Logo"
+            width={32}
+            height={32}
+            class="w-8 h-8"
+            priority
+    />
+    <span class="font-bold text-aura-deep dark:text-aura-cream">AURA</span>
+</a>
+
+---
